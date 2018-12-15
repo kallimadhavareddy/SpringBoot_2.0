@@ -4,9 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class DigitalDairyApplication {
+public class DigitalDiaryApplication {
 	public static void main(String[] args) {
-		SpringApplication.run(DigitalDairyApplication.class, args);
+		SpringApplication.run(DigitalDiaryApplication.class, args);
 	}
 }
 

@@ -8,10 +8,10 @@
 		<version>2.1.1.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>tk.madhavareddy.digital.dairy</groupId>
-	<artifactId>digital-dairy</artifactId>
+	<groupId>tk.madhavareddy.digitaldiary</groupId>
+	<artifactId>digital-diary</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>digital-dairy</name>
+	<name>digital-diary</name>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
