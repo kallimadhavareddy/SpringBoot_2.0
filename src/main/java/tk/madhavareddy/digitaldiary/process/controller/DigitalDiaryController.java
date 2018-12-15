@@ -20,6 +20,7 @@ public class DigitalDiaryController {
 
 	@GetMapping("/diaries/{diaryId}/diary")	
 	public Diary getContent(@PathVariable String diaryId) {
+
 		return digitalDiaryService.getDiary(diaryId);
 	}	
 }
