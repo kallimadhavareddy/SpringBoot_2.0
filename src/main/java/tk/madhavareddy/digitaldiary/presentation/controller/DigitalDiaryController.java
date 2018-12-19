@@ -30,7 +30,10 @@ public class DigitalDiaryController {
 	@PostMapping("/diaries/diary")
 	public Diary createDairy(@RequestBody @Valid Diary diary) {
 		log.info(""+diary);
-		return objectMapperUtils.map(digitalDiaryService.createDiary(objectMapperUtils.map(diary, tk.madhavareddy.digitaldiary.persistence.entity.Diary.class)), Diary.class);
+		return objectMapperUtils.map(
+				digitalDiaryService.createDiary(
+						objectMapperUtils.map(diary, tk.madhavareddy.digitaldiary.persistence.entity.Diary.class)
+				), Diary.class);
 	}
 	@GetMapping("/diaries/dummy/diary")
 	public Diary dummy(){
