@@ -1,23 +1,21 @@
 package tk.madhavareddy.digitaldiary.persistence.entity;
 
-import lombok.Getter;
-import lombok.Setter;
-
+import lombok.Data;
 import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Setter
-@Getter
 @Table(name="DIGITAL_DIARY")
+@Data
 public class Diary {
     @Id
     @GeneratedValue
+    @Column(name="DD_ID")
     int id;
     @Column(name="CONTENT")
     String content;
     @Column(name="CONTENT_DATE")
     LocalDate contentDate;
-    @Column(name="LOCATION")
-    String location;
+    @OneToOne(fetch=FetchType.EAGER,cascade = CascadeType.ALL, mappedBy = "diary")
+    Location location;
 }

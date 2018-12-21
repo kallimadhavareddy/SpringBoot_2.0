@@ -20,7 +20,6 @@ public class DigitalDiaryApplication {
 	public ModelMapper modelMapper() {
 		return new ModelMapper();
 	}
-
 	@Bean
 	public Docket api() {
 		return new Docket(DocumentationType.SWAGGER_2)

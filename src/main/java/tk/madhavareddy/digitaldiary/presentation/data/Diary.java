@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
-
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -21,5 +20,5 @@ public class Diary {
     @DateTimeFormat
     LocalDate contentDate;
     @NotNull
-    String location;
+    Location location;
 }
