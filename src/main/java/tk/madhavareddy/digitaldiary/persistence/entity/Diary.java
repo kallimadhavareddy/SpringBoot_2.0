@@ -3,6 +3,7 @@ package tk.madhavareddy.digitaldiary.persistence.entity;
 import lombok.Data;
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Set;
 
 @Entity
 @Table(name="DIGITAL_DIARY")
@@ -12,8 +13,8 @@ public class Diary {
     @GeneratedValue
     @Column(name="DD_ID")
     int id;
-    @Column(name="CONTENT")
-    String content;
+    @OneToMany(fetch=FetchType.EAGER,cascade=CascadeType.ALL, mappedBy = "diary")
+    Set<Event> events;
     @Column(name="CONTENT_DATE")
     LocalDate contentDate;
     @OneToOne(fetch=FetchType.EAGER,cascade = CascadeType.ALL, mappedBy = "diary")

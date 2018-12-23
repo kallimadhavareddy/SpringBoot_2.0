@@ -3,11 +3,13 @@ package tk.madhavareddy.digitaldiary.presentation.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import tk.madhavareddy.digitaldiary.persistence.entity.Event;
 import tk.madhavareddy.digitaldiary.presentation.data.Diary;
 import tk.madhavareddy.digitaldiary.presentation.util.ObjectMapperUtils;
 import tk.madhavareddy.digitaldiary.process.service.DigitalDiaryService;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @Slf4j
@@ -29,6 +31,9 @@ public class DigitalDiaryController {
 	public Diary createDairy(@RequestBody @Valid Diary diary) {
 		tk.madhavareddy.digitaldiary.persistence.entity.Diary diaryEntity = objectMapperUtils.map(diary, tk.madhavareddy.digitaldiary.persistence.entity.Diary.class);
 		diaryEntity.getLocation().setDiary(diaryEntity);
+		Set<Event> events = diaryEntity.getEvents();
+		events.stream().forEach(event->event.setDiary(diaryEntity));
+		diaryEntity.setEvents(events);
 		return objectMapperUtils.map(digitalDiaryService.createDiary(diaryEntity),Diary.class);
 	}
 }

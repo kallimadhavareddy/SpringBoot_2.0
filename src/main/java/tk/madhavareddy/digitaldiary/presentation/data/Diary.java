@@ -4,10 +4,14 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
+
+import javax.persistence.OneToMany;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.Set;
+
 @Setter
 @Getter
 @ToString
@@ -16,9 +20,9 @@ public class Diary {
     @Max(0)
     int id;
     @NotNull
-    String content;
+    private Set<Event> events;
     @DateTimeFormat
-    LocalDate contentDate;
+    private LocalDate contentDate;
     @NotNull
-    Location location;
+    private Location location;
 }
