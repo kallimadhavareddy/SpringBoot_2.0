@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 import tk.madhavareddy.digitaldiary.persistence.entity.Event;
+import tk.madhavareddy.digitaldiary.persistence.search.DiarySpecification;
 import tk.madhavareddy.digitaldiary.presentation.data.Diary;
 import tk.madhavareddy.digitaldiary.presentation.util.ObjectMapperUtils;
 import tk.madhavareddy.digitaldiary.process.service.DigitalDiaryService;
@@ -47,5 +48,9 @@ public class DigitalDiaryController {
 	@GetMapping("/diaries/{currentPage}/pagination")
 	public List<Diary> getAllDiariesPagination(@PathVariable Integer currentPage) {
 		return  objectMapperUtils.mapAll(digitalDiaryService.findAllPaginated(PageRequest.of(currentPage - 1, 2)),Diary.class);
+	}
+	@GetMapping("/diaries/{eventContent}/search/{currentPage}")
+	public List<Diary> getDiariesByEventContent(@PathVariable String eventContent,@PathVariable Integer currentPage) {
+		return  objectMapperUtils.mapAll(digitalDiaryService.findAll(eventContent,PageRequest.of(currentPage - 1, 2)),Diary.class);
 	}
 }

@@ -2,10 +2,13 @@ package tk.madhavareddy.digitaldiary.persistence.dao.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import tk.madhavareddy.digitaldiary.persistence.dao.DiaryDao;
 import tk.madhavareddy.digitaldiary.persistence.entity.Diary;
 import tk.madhavareddy.digitaldiary.persistence.repository.DigitalDiaryRepository;
+import tk.madhavareddy.digitaldiary.persistence.search.DiarySpecification;
+import tk.madhavareddy.digitaldiary.persistence.search.Search;
 
 import java.util.List;
 @Service
@@ -32,6 +35,12 @@ public class DiaryDaoImpl implements DiaryDao {
     @Override
     public List<Diary> getAllDiaries(Pageable pageable) {
         return digitalDiaryRepository.findAll(pageable).getContent();
+    }
+
+    @Override
+    public List<Diary> getAll(Specification<Diary> searchByStatusSpecification, Pageable pageable) {
+
+        return digitalDiaryRepository.findAll(searchByStatusSpecification,pageable).getContent();
     }
 
 }

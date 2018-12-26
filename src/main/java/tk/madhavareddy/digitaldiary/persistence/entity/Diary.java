@@ -22,4 +22,6 @@ public class Diary {
     @Column(name="STATUS")
     private int status;
 
+
+
 }
