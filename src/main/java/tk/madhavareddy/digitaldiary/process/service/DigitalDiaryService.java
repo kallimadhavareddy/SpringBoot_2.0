@@ -10,4 +10,5 @@ public interface DigitalDiaryService {
 	Diary updateDiary();
 	Diary deleteDiary();
 	List<Diary> getAllDiaries();
+	List<Diary> getAllDiariesByStatusNative(Integer status);
 }

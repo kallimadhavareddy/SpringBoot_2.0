@@ -12,11 +12,14 @@ public class Diary {
     @Id
     @GeneratedValue
     @Column(name="DD_ID")
-    int id;
+    private int id;
     @OneToMany(fetch=FetchType.EAGER,cascade=CascadeType.ALL, mappedBy = "diary")
-    Set<Event> events;
+    private Set<Event> events;
     @Column(name="CONTENT_DATE")
-    LocalDate contentDate;
+    private LocalDate contentDate;
     @OneToOne(fetch=FetchType.EAGER,cascade = CascadeType.ALL, mappedBy = "diary")
-    Location location;
+    private Location location;
+    @Column(name="STATUS")
+    private int status;
+
 }

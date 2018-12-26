@@ -22,4 +22,9 @@ public class DiaryDaoImpl implements DiaryDao {
     public List<Diary> getAllDiaries() {
         return digitalDiaryRepository.findAll();
     }
+
+    @Override
+    public List<Diary> getAllDiariesByStatusNative(Integer status) {
+        return digitalDiaryRepository.findAllDiaryByStatusNative(status);
+    }
 }

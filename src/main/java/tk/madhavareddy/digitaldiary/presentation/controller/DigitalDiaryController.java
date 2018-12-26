@@ -36,4 +36,9 @@ public class DigitalDiaryController {
 		diaryEntity.setEvents(events);
 		return objectMapperUtils.map(digitalDiaryService.createDiary(diaryEntity),Diary.class);
 	}
+
+	@GetMapping("/diaries/{status}/status")
+	public List<Diary> getAllDiariesByStatusNative(@PathVariable Integer status) {
+		return objectMapperUtils.mapAll(digitalDiaryService.getAllDiariesByStatusNative(status),Diary.class);
+	}
 }

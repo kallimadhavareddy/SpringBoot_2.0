@@ -9,4 +9,5 @@ import java.util.List;
 public interface DiaryDao {
     Diary createDiary(Diary diary);
     List<Diary> getAllDiaries();
+    List<Diary> getAllDiariesByStatusNative(Integer status);
 }

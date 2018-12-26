@@ -27,6 +27,11 @@ public class DigitalDiaryServiceImpl implements DigitalDiaryService {
 	}
 
 	@Override
+	public List<Diary> getAllDiariesByStatusNative(Integer status) {
+		return diaryDao.getAllDiariesByStatusNative(status);
+	}
+
+	@Override
 	public Diary updateDiary() {
 		// TODO Auto-generated method stub
 		return null;
@@ -37,5 +42,6 @@ public class DigitalDiaryServiceImpl implements DigitalDiaryService {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 
 }
