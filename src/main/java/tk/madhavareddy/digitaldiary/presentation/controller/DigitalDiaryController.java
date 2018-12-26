@@ -2,6 +2,9 @@ package tk.madhavareddy.digitaldiary.presentation.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 import tk.madhavareddy.digitaldiary.persistence.entity.Event;
 import tk.madhavareddy.digitaldiary.presentation.data.Diary;
@@ -40,5 +43,9 @@ public class DigitalDiaryController {
 	@GetMapping("/diaries/{status}/status")
 	public List<Diary> getAllDiariesByStatusNative(@PathVariable Integer status) {
 		return objectMapperUtils.mapAll(digitalDiaryService.getAllDiariesByStatusNative(status),Diary.class);
+	}
+	@GetMapping("/diaries/{currentPage}/pagination")
+	public List<Diary> getAllDiariesPagination(@PathVariable Integer currentPage) {
+		return  objectMapperUtils.mapAll(digitalDiaryService.findAllPaginated(PageRequest.of(currentPage - 1, 2)),Diary.class);
 	}
 }

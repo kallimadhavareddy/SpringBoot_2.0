@@ -1,9 +1,14 @@
 package tk.madhavareddy.digitaldiary.process.service.imp;
 
+import java.util.Collections;
 import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import tk.madhavareddy.digitaldiary.persistence.dao.DiaryDao;
@@ -41,6 +46,10 @@ public class DigitalDiaryServiceImpl implements DigitalDiaryService {
 	public Diary deleteDiary() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	@Override
+	public List<Diary> findAllPaginated(Pageable pageable) {
+		return diaryDao.getAllDiaries(pageable);
 	}
 
 
