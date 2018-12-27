@@ -16,9 +16,9 @@ public class DiarySpecification  extends BaseSpecification<Diary, Search>{
         };
     }
     private Specification<Diary> diaryEvetContains(String eventContent) {
-        return userAttributeEqual("status", eventContent);
+        return diaryAttributeEqual("status", eventContent);
     }
-    private Specification<Diary> userAttributeEqual(String attribute, String value) {
+    private Specification<Diary> diaryAttributeEqual(String attribute, String value) {
         return (root, query, cb) -> {
             if(value == null) {
                 return null;
@@ -29,7 +29,12 @@ public class DiarySpecification  extends BaseSpecification<Diary, Search>{
             );
         };
     }
-    private Specification<Diary> userAttributeContains(String attribute, String value) {
+    /*
+    Note: Date Search should be equal.
+    Since one to many could not able to do string search.
+    Consider below example for string search incase you added any string value in the Diary Class.
+
+    private Specification<Diary> diaryAttributeContains(String attribute, String value) {
         return (root, query, cb) -> {
             if(value == null) {
                 return null;
@@ -39,7 +44,7 @@ public class DiarySpecification  extends BaseSpecification<Diary, Search>{
                     containsLowerCase(value)
             );
         };
-    }
+    }*/
 
 
 }
