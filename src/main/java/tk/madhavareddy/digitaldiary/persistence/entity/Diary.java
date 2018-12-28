@@ -1,6 +1,7 @@
 package tk.madhavareddy.digitaldiary.persistence.entity;
 
 import lombok.Data;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Set;
@@ -21,7 +22,4 @@ public class Diary {
     private Location location;
     @Column(name="STATUS")
     private int status;
-
-
-
 }

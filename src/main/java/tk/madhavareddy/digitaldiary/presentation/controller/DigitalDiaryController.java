@@ -3,11 +3,8 @@ package tk.madhavareddy.digitaldiary.presentation.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 import tk.madhavareddy.digitaldiary.persistence.entity.Event;
-import tk.madhavareddy.digitaldiary.persistence.search.DiarySpecification;
 import tk.madhavareddy.digitaldiary.presentation.data.Diary;
 import tk.madhavareddy.digitaldiary.presentation.util.ObjectMapperUtils;
 import tk.madhavareddy.digitaldiary.process.service.DigitalDiaryService;
@@ -20,37 +17,36 @@ import java.util.Set;
 public class DigitalDiaryController {
 
 	private final DigitalDiaryService digitalDiaryService;
-	private final ObjectMapperUtils objectMapperUtils;
+
 
 	@Autowired
 	public DigitalDiaryController(DigitalDiaryService digitalDiaryService,ObjectMapperUtils objectMapperUtils) {
 		this.digitalDiaryService = digitalDiaryService;
-		this.objectMapperUtils = objectMapperUtils;
 	}
 	@GetMapping("/diaries")
 	public List<Diary> getAllDiaries() {
-		return objectMapperUtils.mapAll(digitalDiaryService.getAllDiaries(),Diary.class);
+		return digitalDiaryService.getAllDiaries();
 	}
 	@PostMapping("/diaries/diary")
 	public Diary createDairy(@RequestBody @Valid Diary diary) {
-		tk.madhavareddy.digitaldiary.persistence.entity.Diary diaryEntity = objectMapperUtils.map(diary, tk.madhavareddy.digitaldiary.persistence.entity.Diary.class);
-		diaryEntity.getLocation().setDiary(diaryEntity);
-		Set<Event> events = diaryEntity.getEvents();
-		events.stream().forEach(event->event.setDiary(diaryEntity));
-		diaryEntity.setEvents(events);
-		return objectMapperUtils.map(digitalDiaryService.createDiary(diaryEntity),Diary.class);
+		return digitalDiaryService.createDiary(diary);
 	}
-
 	@GetMapping("/diaries/{status}/status")
 	public List<Diary> getAllDiariesByStatusNative(@PathVariable Integer status) {
-		return objectMapperUtils.mapAll(digitalDiaryService.getAllDiariesByStatusNative(status),Diary.class);
+		return digitalDiaryService.getAllDiariesByStatusNative(status);
 	}
-	@GetMapping("/diaries/{currentPage}/pagination")
+	@GetMapping("pagination/diaries/{currentPage}/")
 	public List<Diary> getAllDiariesPagination(@PathVariable Integer currentPage) {
-		return  objectMapperUtils.mapAll(digitalDiaryService.findAllPaginated(PageRequest.of(currentPage - 1, 2)),Diary.class);
+		return digitalDiaryService.findAllPaginated(currentPage);
 	}
-	@GetMapping("/diaries/{eventContent}/search/{currentPage}")
+	@GetMapping("search/diaries/{eventContent}/{currentPage}")
 	public List<Diary> getDiariesByEventContent(@PathVariable String eventContent,@PathVariable Integer currentPage) {
-		return  objectMapperUtils.mapAll(digitalDiaryService.findAll(eventContent,PageRequest.of(currentPage - 1, 2)),Diary.class);
+		return digitalDiaryService.findAll(eventContent,currentPage);
 	}
+
+	@GetMapping("diaries/{diaryId}/diary")
+	public Diary getDiary(@PathVariable Integer diaryId){
+		return digitalDiaryService.getDiary(diaryId);
+	}
+
 }

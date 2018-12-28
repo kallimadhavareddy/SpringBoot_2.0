@@ -7,9 +7,6 @@ import org.springframework.stereotype.Service;
 import tk.madhavareddy.digitaldiary.persistence.dao.DiaryDao;
 import tk.madhavareddy.digitaldiary.persistence.entity.Diary;
 import tk.madhavareddy.digitaldiary.persistence.repository.DigitalDiaryRepository;
-import tk.madhavareddy.digitaldiary.persistence.search.DiarySpecification;
-import tk.madhavareddy.digitaldiary.persistence.search.Search;
-
 import java.util.List;
 @Service
 public class DiaryDaoImpl implements DiaryDao {
@@ -39,8 +36,10 @@ public class DiaryDaoImpl implements DiaryDao {
 
     @Override
     public List<Diary> getAll(Specification<Diary> searchByStatusSpecification, Pageable pageable) {
-
         return digitalDiaryRepository.findAll(searchByStatusSpecification,pageable).getContent();
     }
-
+    @Override
+    public Diary getDiary(int diaryId) {
+        return digitalDiaryRepository.getOne(diaryId);
+    }
 }
