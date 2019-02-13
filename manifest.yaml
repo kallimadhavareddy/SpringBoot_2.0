@@ -1,0 +1,6 @@
+applications:
+  - name: cf-digital-diary
+    buildpack: java_buildpack
+    path: target/digital-diary-0.0.1-SNAPSHOT.jar
+    services:
+      - digital-dairy
