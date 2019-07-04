@@ -24,8 +24,7 @@ public class DiarySpecification  extends BaseSpecification<Diary, Search>{
                 return null;
             }
             return cb.equal(
-                    cb.lower(root.get(attribute)),
-                    Integer.parseInt(value)
+                    cb.lower(root.get(attribute)),Integer.parseInt(value)
             );
         };
     }

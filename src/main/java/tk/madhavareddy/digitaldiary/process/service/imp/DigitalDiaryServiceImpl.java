@@ -39,7 +39,7 @@ public class DigitalDiaryServiceImpl implements DigitalDiaryService {
         tk.madhavareddy.digitaldiary.persistence.entity.Diary diaryEntity = objectMapperUtils.map(diary, tk.madhavareddy.digitaldiary.persistence.entity.Diary.class);
         diaryEntity.getLocation().setDiary(diaryEntity);
         Set<Event> events = diaryEntity.getEvents();
-        events.stream().forEach(event->event.setDiary(diaryEntity));
+        events.forEach(event->event.setDiary(diaryEntity));
         diaryEntity.setEvents(events);
         return objectMapperUtils.map(diaryDao.createDiary(diaryEntity), Diary.class);
 	}
