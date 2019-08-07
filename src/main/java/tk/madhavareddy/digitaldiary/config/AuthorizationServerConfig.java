@@ -25,7 +25,6 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 @EnableAuthorizationServer
 @Slf4j
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
-
     static final String CLIENT_ID = "digital-diary-client";
     static final String CLIENT_SECRET = "{noop}digital-diary-secret";
     static final String GRANT_TYPE = "password";
