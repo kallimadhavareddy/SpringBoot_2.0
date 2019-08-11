@@ -1,0 +1,222 @@
+<style type="text/css">/*
+
+*/
+
+h3 {
+    visibility: visible;
+    color: #FFFFFF;
+}
+.text{
+    visibility: visible;
+    color: #FFFFFF;
+    text-align: left;
+}
+.folded-corner:hover .text{
+    visibility: visible;
+    color: #1291b4;
+}
+.folded-corner:hover h3{
+    visibility: visible;
+    color: #1291b4;
+}
+.Services-tab{
+    margin-top:20px;
+}
+
+/*
+  nav link items
+*/
+.folded-corner{
+    padding: 25px 25px;
+    position: relative;
+    font-size: 90%;
+    text-decoration: none;
+    color: #1291b4;
+    background: transparent;
+    transition: all ease .5s;
+    border: 1px solid #43c3cf;
+}
+.folded-corner:hover{
+    background-color: #43c3cf;
+}
+
+/*
+  paper fold corner
+*/
+
+.folded-corner:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    border-style: solid;
+    border-width: 0 0px 0px 0;
+    border-color: #ddd #1291b4;
+    transition: all ease .3s;
+}
+
+/*
+  on li hover make paper fold larger
+*/
+.folded-corner:hover:before {
+    background-color: #D00003;
+    border-width: 0 50px 50px 0;
+    border-color: #eee #1291b4;
+
+}
+
+.service_tab_1{
+    background-color: #1291b4;
+}
+.service_tab_1:hover .fa-icon-image{
+    color: #1291b4;
+    transform: rotate(360deg) scale(1.5);
+}
+
+
+.fa-icon-image{
+    color: #f197b3;
+    display: inline-block;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    line-height: 1;
+    font-size-adjust: none;
+    font-stretch: normal;
+    -moz-font-feature-settings: normal;
+    -moz-font-language-override: normal;
+    text-rendering: auto;
+    transition: all .65s linear 0s;
+    text-align: center;
+    transition: all 1s cubic-bezier(.99,.82,.11,1.41);
+    link-hover-color:white;
+
+}
+.btn-xs {
+    padding: 10px 10px;
+    font-size: 10px;
+    border-radius: 8px;
+}
+ul {
+    list-style-type: none;
+}</style>
+<!-- Font Awesome -->
+<h3>Spring Boot 2 tutorial</h3>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 Services-tab  item">
+            <div class="folded-corner service_tab_1">
+                <div class="text"><i class="fa fa-image fa-5x fa-icon-image"></i>
+                    <h3>Introduction</h3>
+                    <ul>
+                        <li><a class="badge badge-light">An Into to Microservices</a></li>
+                        <li><a class="badge badge-light">Crating Spring Boot Sample</a></li>
+                        <li><a class="badge badge-light">Deploy Spring Boot</a></li>
+                        <li><a class="badge badge-light" href="index.php?option=com_content&amp;view=article&amp;id=17&amp;Itemid=192">Git</a></li>
+                        <li><a class="badge badge-light" href="index.php?option=com_content&amp;view=article&amp;id=19&amp;Itemid=194">logging</a></li>
+                        <li><a class="badge badge-light" href="index.php?option=com_content&amp;view=article&amp;id=19&amp;Itemid=194">@Slf4j</a></li>
+                        <li><a class="badge badge-light" href="index.php?option=com_content&amp;view=article&amp;id=24&amp;Itemid=199">Validation</a></li>
+                        <li><a class="badge badge-light" href="index.php?option=com_content&amp;view=article&amp;id=24&amp;Itemid=199">Annotations</a></li>
+                        <li><a class="badge badge-light" href="index.php?option=com_content&amp;view=article&amp;id=22&amp;Itemid=196">Model Mappers</a></li>
+                        <li><a class="badge badge-light" href="index.php?option=com_content&amp;view=article&amp;id=25&amp;Itemid=202">Swagger</a></li>
+                        <li><a class="badge badge-light" href="index.php?option=com_content&amp;view=article&amp;id=33&amp;Itemid=208">Exception Handling</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 Services-tab item">
+            <div class="folded-corner service_tab_1">
+                <div class="text"><i class="fa fa-user-secret fa-5x fa-icon-image"></i>
+                    <h3>Security</h3>
+                    <ul>
+                        <li><a class="badge badge-light" href="index.php?option=com_content&amp;view=article&amp;id=25&amp;Itemid=200">About SSL</a></li>
+                        <li><a class="badge badge-light" href="index.php?option=com_content&amp;view=article&amp;id=25&amp;Itemid=200">self signed certificates</a></li>
+                        <li><a class="badge badge-light" href="index.php?option=com_content&amp;view=article&amp;id=25&amp;Itemid=200">self signed SSL</a></li>
+                        <li><a class="badge badge-light">Oauth 2</a></li>
+                    </ul>
+                    </br>
+                    </br>
+                    </br>
+                    </br>
+                    </br>
+                    </br>
+                    </br>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 Services-tab item">
+            <div class="folded-corner service_tab_1">
+                <div class="text"><i class="fa fa-database fa-5x fa-icon-image"></i>
+                    <h3>JPA</h3>
+                    <ul>
+                        <li><a class="badge badge-light" href="index.php?option=com_content&amp;view=article&amp;id=27&amp;Itemid=203">One to One</a></li>
+                        <li><a class="badge badge-light" href="index.php?option=com_content&amp;view=article&amp;id=29&amp;Itemid=204">One to Many</a></li>
+                        <li><a class="badge badge-light" href="index.php?option=com_content&amp;view=article&amp;id=32&amp;Itemid=206">Pagination</a></li>
+                        <li><a class="badge badge-light" href="index.php?option=com_content&amp;view=article&amp;id=31&amp;Itemid=207">Specification</a></li>
+                        <li><a class="badge badge-light">Composite Key</a></li>
+                        <li><a class="badge badge-light">Element Collction</a></li>
+                        <li><a class="badge badge-light">Embedded</a></li>
+                        <li><a class="badge badge-light">Dynamic Query</a></li>
+                        <li><a class="badge badge-light">Generate CSV</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 Services-tab item">
+            <div class="folded-corner service_tab_1">
+                <div class="text"><i class="fa fa-balance-scale fa-5x fa-icon-image"></i>
+                    <h3>Api Gateway</h3>
+                    <ul>
+                        <li><a class="badge badge-light">Zuul Api</a></li>
+                        <li><a class="badge badge-light">Zuul load balancer</a></li>
+                    </ul>
+                    <i class="fa fa-server fa-5x fa-icon-image"></i>
+                    <h3>Service Discovery</h3>
+                    <ul>
+                        <li><a class="badge badge-light">Eureka service discovery</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 Services-tab item">
+            <div class="folded-corner service_tab_1">
+                <div class="text"><i class="fa fa-envelope-open fa-5x fa-icon-image"></i>
+                    <h3>KAFKA</h3>
+                    <ul>
+                        <li><a class="badge badge-light">kafka example</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 Services-tab item">
+            <div class="folded-corner service_tab_1">
+                <div class="text"><i class="fa fa-connectdevelop fa-5x fa-icon-image"></i>
+                    <h3>Containers</h3>
+                    <ul>
+                        <li><a class="badge badge-light">Docker</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 Services-tab item">
+            <div class="folded-corner service_tab_1">
+                <div class="text"><i class="fa fa-th fa-5x fa-icon-image"></i>
+                    <h3>Circuit Breaker</h3>
+                    <ul>
+                        <li><a class="badge badge-light">Hystrix</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 Services-tab item">
+            <div class="folded-corner service_tab_1">
+                <div class="text"><i class="fa fa-cloud fa-5x fa-icon-image"></i>
+                    <h3>Cloud</h3>
+                    <ul>
+                        <li><a class="badge badge-light" href="index.php?option=com_content&amp;view=article&amp;id=34&amp;Itemid=209">Pivotal cloud foundry</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
