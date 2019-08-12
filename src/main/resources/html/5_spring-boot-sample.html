@@ -1,0 +1,97 @@
+<style type="text/css">/*Media object*/
+.media
+{
+    padding-top: 40px;
+}
+.media a:hover, .media a:focus
+{
+    text-decoration: none;
+    outline: none;
+}
+.media .media-left .icon
+{
+    display: block;
+    width: 80px;
+    height: 80px;
+    padding: 16px 6px;
+    color: #f0f0f0;
+    text-align: center;
+    border-radius: 50%;
+}
+.media .media-left .icon::before
+{
+    font-size: 44px;
+}
+.article-ratings-social-share{
+    visibility: hidden;
+}</style>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6 mb-4">
+            <div class="card h-150">
+                <div class="card-body">
+                    <h4 class="card-title"><a href="#">How to create your first project</a></h4>
+                    <ul>
+                        <li>visit https://start.spring.io/</li>
+                        <li>Create Sample Project with following fields!</li>
+                    </ul>
+                    <!--image--> <img src="images/DIGITAL_DIARY/SpringBoot_2.0/spring-boot-sample.png" alt="" /></div>
+            </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+            <div class="card h-150">
+                <div class="card-body">
+                    <h4 class="card-title"><a href="#">Project Structure</a></h4>
+                    <ul>
+                        <li>Below project crates as shown below</li>
+                        <li>Crate one package controller and create your RestController class</li>
+                    </ul>
+                    <!--image--> <img src="images/DIGITAL_DIARY/SpringBoot_2.0/SP_ProjctStructure.png" alt="" /></div>
+            </div>
+        </div>
+    </div>
+    <!--<pre><code class="language-whatever">Your java code here</code></pre>-->
+    <div class="row">
+        <div class="col-lg-6 mb-4">
+            <div class="card h-150">
+                <div class="card-body">
+                    <h4 class="card-title"><a href="https://github.com/kallimadhavareddy/SpringBoot_2.0/blob/spring-boot-sample/src/main/java/tk/madhavareddy/digitaldiary/DigitalDiaryApplication.java">DigitalDiaryApplication.java</a></h4>
+                    <pre><code class="language-whatever">
+package tk.madhavareddy.digitaldiary;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class DigitalDiaryApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(DigitalDiaryApplication.class, args);
+    }
+}
+                    </code></pre>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+            <div class="card h-150">
+                <div class="card-body">
+                    <h4 class="card-title"><a href="https://github.com/kallimadhavareddy/SpringBoot_2.0/edit/spring-boot-sample/src/main/java/tk/madhavareddy/digitaldiary/process/controller/DigitalDiaryController.java">DigitalDairyController.java</a></h4>
+                    <pre><code class="language-whatever">
+package tk.madhavareddy.digitaldiary.process.controller;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class DigitalDiaryController {
+    @GetMapping("/diaries/diary")
+    public String getDiary() {
+        return "Spring boot Sample!, Say everyone Hello to digital Diary project";
+    }
+}
+                    </code></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
