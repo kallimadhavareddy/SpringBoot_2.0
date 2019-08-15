@@ -1,0 +1,105 @@
+<style type="text/css">/*Media object*/
+.media
+{
+    padding-top: 40px;
+}
+.media a:hover, .media a:focus
+{
+    text-decoration: none;
+    outline: none;
+}
+.media .media-left .icon
+{
+    display: block;
+    width: 80px;
+    height: 80px;
+    padding: 16px 6px;
+    color: #f0f0f0;
+    text-align: center;
+    border-radius: 50%;
+}
+.media .media-left .icon::before
+{
+    font-size: 44px;
+}
+.article-ratings-social-share{
+    visibility: hidden;
+}
+ul {
+    list-style-type: none;
+}
+</style>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6 mb-4">
+            <div class="card h-150">
+                <div class="card-body">
+                    <h4 class="card-title"><a href="#">JDK9 keytool Transitions Default Keystore to PKCS12</a></h4>
+                    <ul>
+                        PKCS12 has a number of advantages:
+                        <li>It is more extensible</li>
+                        <li>It supports stronger cryptographic algorithms</li>
+                        <li>It is widely adopted.  PKCS12 is frequently the format provided by certificate authorities when issuing certificates.</li>
+                    </ul>
+                    <h4 class="card-title"><a href="#">How to generate PKCS#12 certificate.</a></h4>
+                    <ul>
+                        <li>keytool -genkey -alias tomcat -storetype PKCS12 -keyalg RSA -keysize 2048 -keystore keystore.p12 -validity 3650</li>
+                    </ul>
+                    <img src="images/DIGITAL_DIARY/SpringBoot_2.0/SSL/SSL_1.PNG" alt="" />
+
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+            <div class="card h-150">
+                <div class="card-body">
+                    <h4 class="card-title"><a href="#">By assigning simple properties in application.properties we can use HTTPS the changes we need to do is</a></h4>
+                    <img src="images/DIGITAL_DIARY/SpringBoot_2.0/SSL/SSL_2.PNG" alt="" />
+                    <h4 class="card-title"><a href="#">Service Class</a></h4>
+                    <ul>
+                        <h5>Generate JKS </h5>
+                        <li>keytool -genkeypair -alias tomcat -keyalg RSA -keysize 2048 -keystore keystore.jks -validity 3650</li>
+                        <h5>Generate pkcs12 file from existing jks file</h5>
+                        <li>keytool -importkeystore -srckeystore keystore.jks -destkeystore keystore.p12 -deststoretype pkcs12</li>
+                        <h5>Generate crt file to use in postman certificates.</h5>
+                        <li> keytool -export -keystore keystore.jks -alias tomcat -file server.crt</li>
+                        <h5>in case still issue with post man request import the certificate in jvm cacerts file with administrator user</h5>
+                        <li>keytool -importcert -file server.crt -alias tomcat -keystore "C:/Program Files/Java/jdk-11.0.1/lib/security/cacerts"</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6 mb-4">
+            <div class="card h-150">
+                <div class="card-body">
+                    <h4 class="card-title"><a href="#">Testing</a></h4>
+                    <ul>Request Body
+                        <li><pre>{
+"content": "Hello , this is example content",
+"contentDate": "2018-12-19",
+"location": "Shuman,Brussels"
+}
+                        </pre></li>
+                    </ul>
+
+                    <h4 class="card-title"><a href="#">https://localhost:8443/diaries/diary</a></h4>
+                    <img src="images/DIGITAL_DIARY/SpringBoot_2.0/SSL/SSL_3.PNG" alt="" />
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+            <div class="card h-150">
+                <div class="card-body">
+                    <h4 class="card-title"><a href="#">Get All the digital dieries:</a></h4>
+                    <img src="images/DIGITAL_DIARY/SpringBoot_2.0/SSL/SSL_4.PNG" alt="" />
+                    <h4 class="card-title"><a href="#">Postman->settings->Certificates->Add Certificate</a></h4>
+                    <img src="images/DIGITAL_DIARY/SpringBoot_2.0/SSL/SSL_5.PNG" alt="" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>

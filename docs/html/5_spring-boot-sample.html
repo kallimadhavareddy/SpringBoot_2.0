@@ -57,7 +57,17 @@
                 <div class="card-body">
                     <h4 class="card-title"><a href="https://github.com/kallimadhavareddy/SpringBoot_2.0/blob/spring-boot-sample/src/main/java/tk/madhavareddy/digitaldiary/DigitalDiaryApplication.java">DigitalDiaryApplication.java</a></h4>
                     <pre><code class="language-whatever">
+package tk.madhavareddy.digitaldiary;
 
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class DigitalDiaryApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(DigitalDiaryApplication.class, args);
+    }
+}
                     </code></pre>
                 </div>
             </div>
@@ -67,7 +77,18 @@
                 <div class="card-body">
                     <h4 class="card-title"><a href="https://github.com/kallimadhavareddy/SpringBoot_2.0/edit/spring-boot-sample/src/main/java/tk/madhavareddy/digitaldiary/process/controller/DigitalDiaryController.java">DigitalDairyController.java</a></h4>
                     <pre><code class="language-whatever">
+package tk.madhavareddy.digitaldiary.process.controller;
 
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+//@RestController
+public class DigitalDiaryController2 {
+    @GetMapping("/diaries/diary")
+    public String getDiary() {
+        return "Spring boot Sample!, Say everyone Hello to digital Diary project";
+    }
+}
                     </code></pre>
                 </div>
             </div>
