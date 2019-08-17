@@ -21,7 +21,16 @@ public class Location {
     String userLocation;
     @Column(name="COUNTRY")
     String country;
-    @OneToOne(fetch=FetchType.EAGER,optional=false)
+    /*
+    From the JPA 2.0 spec, the defaults are like so:
+
+OneToMany: LAZY
+ManyToOne: EAGER
+ManyToMany: LAZY
+OneToOne: EAGER
+@MapsId
+     */
+    @OneToOne(fetch=FetchType.EAGER,optional=false)//by default fetch type is eager in JPA
     @JoinColumn(name="DD_ID",nullable=false)
     Diary diary;
 }

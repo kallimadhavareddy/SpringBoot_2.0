@@ -1,7 +1,15 @@
 package tk.madhavareddy.digitaldiary.persistence.entity;
 
 import lombok.Data;
-import javax.persistence.*;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import java.time.LocalDate;
 
 @Entity
@@ -16,6 +24,7 @@ public class Diary {
     String content;
     @Column(name="CONTENT_DATE")
     LocalDate contentDate;
-    @OneToOne(fetch=FetchType.EAGER,cascade = CascadeType.ALL, mappedBy = "diary")
+    //default fetch type is EAGER
+    @OneToOne(fetch= FetchType.LAZY,cascade = CascadeType.ALL, mappedBy = "diary")
     Location location;
 }

@@ -7,6 +7,8 @@ import tk.madhavareddy.digitaldiary.persistence.entity.Diary;
 import tk.madhavareddy.digitaldiary.persistence.repository.DigitalDiaryRepository;
 
 import java.util.List;
+import java.util.Optional;
+
 @Service
 public class DiaryDaoImpl implements DiaryDao {
     private final DigitalDiaryRepository digitalDiaryRepository;
@@ -21,5 +23,17 @@ public class DiaryDaoImpl implements DiaryDao {
     @Override
     public List<Diary> getAllDiaries() {
         return digitalDiaryRepository.findAll();
+    }
+    @Override
+    public Optional<Diary> getDiaryById(int id) {
+        return digitalDiaryRepository.findDiaryById(id);
+    }
+    @Override
+    public Diary updateDiary(Diary diary) {
+        return digitalDiaryRepository.save(diary);
+    }
+    @Override
+    public void deleteDiaryById(int id) {
+        digitalDiaryRepository.deleteById(id);
     }
 }
