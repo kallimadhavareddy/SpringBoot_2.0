@@ -7,7 +7,5 @@ import java.util.List;
 
 public interface DigitalDiaryService {
 	Diary createDiary(Diary diary);
-	Diary updateDiary();
-	Diary deleteDiary();
 	List<Diary> getAllDiaries();
 }

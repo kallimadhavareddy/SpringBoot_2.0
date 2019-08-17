@@ -6,7 +6,7 @@ import tk.madhavareddy.digitaldiary.persistence.entity.Diary;
 
 import java.util.List;
 
-public interface DiaryDao {
-    Diary createDiary(Diary diary);
-    List<Diary> getAllDiaries();
+public interface Dao<T> {
+    Diary create(T diary);
+    List<T> getAll();
 }

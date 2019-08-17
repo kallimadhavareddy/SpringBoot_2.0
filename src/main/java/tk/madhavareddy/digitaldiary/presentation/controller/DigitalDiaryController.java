@@ -2,9 +2,11 @@ package tk.madhavareddy.digitaldiary.presentation.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-import tk.madhavareddy.digitaldiary.presentation.data.Diary;
-import tk.madhavareddy.digitaldiary.presentation.util.ObjectMapperUtils;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+import tk.madhavareddy.digitaldiary.persistence.entity.Diary;
 import tk.madhavareddy.digitaldiary.process.service.DigitalDiaryService;
 import javax.validation.Valid;
 import java.util.List;
@@ -14,21 +16,19 @@ import java.util.List;
 public class DigitalDiaryController {
 
 	private final DigitalDiaryService digitalDiaryService;
-	private final ObjectMapperUtils objectMapperUtils;
 
 	@Autowired
-	public DigitalDiaryController(DigitalDiaryService digitalDiaryService,ObjectMapperUtils objectMapperUtils) {
+	public DigitalDiaryController(DigitalDiaryService digitalDiaryService) {
 		this.digitalDiaryService = digitalDiaryService;
-		this.objectMapperUtils = objectMapperUtils;
 	}
 	@GetMapping("/diaries")
 	public List<Diary> getAllDiaries() {
-		return objectMapperUtils.mapAll(digitalDiaryService.getAllDiaries(),Diary.class);
+
+		return digitalDiaryService.getAllDiaries();
 	}
 	@PostMapping("/diaries/diary")
 	public Diary createDairy(@RequestBody @Valid Diary diary) {
-		tk.madhavareddy.digitaldiary.persistence.entity.Diary diaryEntity = objectMapperUtils.map(diary, tk.madhavareddy.digitaldiary.persistence.entity.Diary.class);
-		diaryEntity.getLocation().setDiary(diaryEntity);
-		return objectMapperUtils.map(digitalDiaryService.createDiary(diaryEntity),Diary.class);
+		diary.getLocation().setDiary(diary);
+		return digitalDiaryService.createDiary(diary);
 	}
 }
