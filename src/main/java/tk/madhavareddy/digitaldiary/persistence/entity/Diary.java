@@ -1,6 +1,8 @@
 package tk.madhavareddy.digitaldiary.persistence.entity;
 
 import lombok.Data;
+import tk.madhavareddy.digitaldiary.persistence.model.Status;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 
@@ -16,6 +18,9 @@ public class Diary {
     String content;
     @Column(name="CONTENT_DATE")
     LocalDate contentDate;
-    @OneToOne(fetch=FetchType.EAGER,cascade = CascadeType.ALL, mappedBy = "diary")
+    @OneToOne(fetch=FetchType.LAZY,cascade = CascadeType.ALL, mappedBy = "diary")
     Location location;
+    @Enumerated
+    @Column(name="STATUS")
+    Status status;
 }

@@ -32,7 +32,7 @@ public class Location {
     String userLocation;
     @Column(name="COUNTRY")
     String country;
-    @OneToOne(fetch= FetchType.EAGER,optional=false)
+    @OneToOne(fetch= FetchType.LAZY,optional=false)
     @JoinColumn(name="DD_ID",nullable=false)
     @JsonIgnore
     Diary diary;

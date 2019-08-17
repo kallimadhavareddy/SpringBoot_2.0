@@ -1,0 +1,246 @@
+<style type="text/css">.article-ratings-social-share{
+    visibility: hidden;
+}
+ul {
+    list-style-type: none;
+}
+code {
+    display: block;
+    font-family: monospace;
+    white-space: pre;
+    margin: 1em 0;
+}</style>
+<div class="row">
+    <div class="col-lg-6 mb-4">
+        <h4 class="card-title"><a href="#">Entity</a></h4>
+        <img src="images/DIGITAL_DIARY/SpringBoot_2.0/JPA/OneToOne/entity.png" alt="" /></div>
+    <div class="col-lg-6 mb-4">
+        <h4 class="card-title"><a href="#">One to One</a></h4>
+        <img src="images/DIGITAL_DIARY/SpringBoot_2.0/JPA/OneToOne/one-to-one.png" alt="" /></div>
+</div>
+<div class="row">
+    <div class="col-lg-6 mb-4">
+        <p>
+            <p>casecade operation is applied on an entity then it will perform on that particular entity only. These operations will not be applicable to the other entities that are related to it.
+            <br>
+            To establish a dependency between related entities, JPA provides javax.persistence.CascadeType enumerated types that define the cascade operations.
+            </p>
+
+        <ul>
+        <li>PERSIST	--> if the parent entity is persisted then all its related entity will also be persisted.</li>
+        <li>MERGE	--> if the parent entity is merged then all its related entity will also be merged.</li>
+        <li>DETACH	--> if the parent entity is detached then all its related entity will also be detached.</li>
+        <li>REFRESH	--> if the parent entity is refreshed then all its related entity will also be refreshed.</li>
+        <li>REMOVE	--> if the parent entity is removed then all its related entity will also be removed.</li>
+        <li>ALL	--> all the above cascade operations can be applied to the entities related to parent entity.</li>
+        </ul>
+        </p>
+    </div>
+    <div class="col-lg-6 mb-4">
+        <h4>orphanRemoval</h4>
+    <p>
+       <p> orphanRemoval is an entirely ORM-specific thing. It marks "child" entity to be removed when it's no longer referenced from the "parent" entity, e.g. when you remove the child entity from the corresponding collection of the parent entity.
+        <br>
+        ON DELETE CASCADE is a database-specific thing, it deletes the "child" row in the database when the "parent" row is deleted.
+    </p>
+        <h4>fetch type</h4>
+        <p>
+            The default depends on the cardinality of the relationship. All to-one relationships use FetchType.EAGER and all to-many relationships FetchType.LAZY.
+            <br>
+            Even the best default doesn’t fit for all use cases, and you sometimes want to change it. You can do this by providing your preferred FetchType to the relationship annotation
+        </p>
+    </p>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6 mb-4">
+        <h4 class="card-title"><a href="#">Entity Class Dairy</a></h4>
+        <pre><code>
+package tk.madhavareddy.digitaldiary.persistence.entity;
+
+import lombok.Data;
+import javax.persistence.*;
+import java.time.LocalDate;
+
+@Entity
+@Table(name="DIGITAL_DIARY")
+@Data
+public class Diary {
+    @Id
+    @GeneratedValue
+    @Column(name="DD_ID")
+    int id;
+    @Column(name="CONTENT")
+    String content;
+    @Column(name="CONTENT_DATE")
+    LocalDate contentDate;
+            <b class="bg-warning">
+    @OneToOne(fetch=FetchType.EAGER,cascade = CascadeType.ALL, mappedBy = "diary")
+    Location location;
+            </b>
+    <b class="bg-info">@Enumerated
+    @Column(name="STATUS");
+    Status status;</b>
+}
+        </code></pre>
+        <h4 class="card-title"><a href="#">enum Class</a></h4>
+        <pre><code>
+package tk.madhavareddy.digitaldiary.persistence.model;
+<b class="bg-info">
+public enum Status {
+    OPEN,
+    SUBMITTED,
+    CLOSE
+}
+</b>
+            </code></pre>
+        <h4 class="card-title"><a href="#">One to one Relationship class Location</a></h4>
+        <pre><code>
+package tk.madhavareddy.digitaldiary.persistence.entity;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+
+@Entity
+@Table(name="DIG_LOCATION")
+@Setter
+@Getter
+@NoArgsConstructor
+public class Location {
+    @Id
+    @GeneratedValue
+    int id;
+    @Column(name="LONGITUDE")
+    String longitude;
+    @Column(name="LATITUDE")
+    String latitude;
+    @Column(name="LOCATION")
+    String userLocation;
+    @Column(name="COUNTRY")
+    String country;
+    <b class="bg-warning">@OneToOne(fetch= FetchType.EAGER,optional=false)
+    @JoinColumn(name="DD_ID",nullable=false)
+    @JsonIgnore
+        Diary diary;</b>
+}</code></pre>
+    </div>
+    <div class="col-lg-6 mb-4">
+        <h4 class="card-title"><a href="#">Interface Dao</a></h4>
+        <pre><code>
+package tk.madhavareddy.digitaldiary.persistence.dao;
+import tk.madhavareddy.digitaldiary.persistence.entity.Diary;
+
+import java.util.List;
+
+public interface Dao&amp;ltT&amp;gt {
+    Diary create(T diary);
+    List&amp;ltT&amp;gt getAll();
+}
+ </code></pre>
+        <h4 class="card-title"><a href="#">Diary Dao Implementation class</a></h4>
+        <pre><code>
+package tk.madhavareddy.digitaldiary.persistence.dao.impl;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import tk.madhavareddy.digitaldiary.persistence.dao.Dao;
+import tk.madhavareddy.digitaldiary.persistence.entity.Diary;
+import tk.madhavareddy.digitaldiary.persistence.repository.DigitalDiaryRepository;
+
+import java.util.List;
+@Service
+public class DiaryDaoImpl implements Dao&amp;ltDiary&amp;gt {
+    private final DigitalDiaryRepository digitalDiaryRepository;
+    @Autowired
+    public DiaryDaoImpl(DigitalDiaryRepository digitalDiaryRepository){
+        this.digitalDiaryRepository= digitalDiaryRepository;
+    }
+    @Override
+    public Diary create(Diary diary) {
+        return digitalDiaryRepository.save(diary);
+    }
+    @Override
+    public List&amp;ltDiary&amp;gt getAll() {
+        return digitalDiaryRepository.findAll();
+    }
+}
+</code></pre>
+        <h4 class="card-title"><a href="#">Repository class for DigitalDiary</a></h4>
+        <pre><code>
+package tk.madhavareddy.digitaldiary.persistence.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import tk.madhavareddy.digitaldiary.persistence.entity.Diary;
+
+@Repository
+    public interface DigitalDiaryRepository extends JpaRepository&amp;ltDiary, <b class="bg-warning">Integer</b>&amp;gt {
+}</code></pre>
+    </div>
+</div>
+<!--
+<div class="row">
+    <div class="col-lg-6 mb-4">
+        <pre>
+            <code>
+            </code>
+        </pre>
+
+    </div>
+    <div class="col-lg-6 mb-4">
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6 mb-4">
+    </div>
+    <div class="col-lg-6 mb-4">
+    </div>
+</div>
+-->
+<div class="row">
+    <div class="col-lg-6 mb-4"><h4>One to One</h4>
+        <b></b>http://localhost:8080/diaries/diary</b>
+        <h4>Request Body</h4>
+        <pre><code>{
+    "id": 0,
+    "content": "Today Content 2",
+    "contentDate": "2019-08-17",
+    "location": {
+        "longitude": "90",
+        "latitude": "90",
+        "userLocation": "Shuman",
+        "country": "Belgium"
+    },
+    "status":"OPEN"
+}
+</code>
+</pre>
+    </div>
+    <div class="col-lg-6 mb-4"><h4>Response Results</h4>
+        <pre><code>{
+    "id": 3,
+    "content": "Today Content 2",
+    "contentDate": "2019-08-17",
+    "location": {
+        "id": 4,
+        "longitude": "90",
+        "latitude": "90",
+        "userLocation": "Shuman",
+        "country": "Belgium"
+    },
+    "status": "OPEN"
+}</code></pre>
+    </div>
+</div>
