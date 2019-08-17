@@ -1,8 +1,19 @@
 package tk.madhavareddy.digitaldiary.persistence.entity;
 
-import lombok.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
 
 @Entity
 @Table(name="DIG_LOCATION")
@@ -21,7 +32,8 @@ public class Location {
     String userLocation;
     @Column(name="COUNTRY")
     String country;
-    @OneToOne(fetch=FetchType.EAGER,optional=false)
+    @OneToOne(fetch= FetchType.EAGER,optional=false)
     @JoinColumn(name="DD_ID",nullable=false)
+    @JsonIgnore
     Diary diary;
 }
