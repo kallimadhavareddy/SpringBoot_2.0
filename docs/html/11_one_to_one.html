@@ -9,7 +9,8 @@ code {
     font-family: monospace;
     white-space: pre;
     margin: 1em 0;
-}</style>
+}
+</style>
 <div class="row">
     <div class="col-lg-6 mb-4">
         <h4 class="card-title"><a href="#">Entity</a></h4>
@@ -19,24 +20,24 @@ code {
         <img src="images/DIGITAL_DIARY/SpringBoot_2.0/JPA/OneToOne/one-to-one.png" alt="" /></div>
 </div>
 <div class="row">
-    <div class="col-lg-6 mb-4">
+    <div class="col-lg-6 mb-4 small">
+        <h4>Casecade</h4>
         <p>
             <p>casecade operation is applied on an entity then it will perform on that particular entity only. These operations will not be applicable to the other entities that are related to it.
             <br>
             To establish a dependency between related entities, JPA provides javax.persistence.CascadeType enumerated types that define the cascade operations.
             </p>
-
-        <ul>
-        <li>PERSIST	--> if the parent entity is persisted then all its related entity will also be persisted.</li>
-        <li>MERGE	--> if the parent entity is merged then all its related entity will also be merged.</li>
-        <li>DETACH	--> if the parent entity is detached then all its related entity will also be detached.</li>
-        <li>REFRESH	--> if the parent entity is refreshed then all its related entity will also be refreshed.</li>
-        <li>REMOVE	--> if the parent entity is removed then all its related entity will also be removed.</li>
-        <li>ALL	--> all the above cascade operations can be applied to the entities related to parent entity.</li>
-        </ul>
         </p>
+        <ul class="text-success small">
+            <li>PERSIST	--> if the parent entity is persisted then all its related entity will also be persisted.</li>
+            <li>MERGE	--> if the parent entity is merged then all its related entity will also be merged.</li>
+            <li>DETACH	--> if the parent entity is detached then all its related entity will also be detached.</li>
+            <li>REFRESH	--> if the parent entity is refreshed then all its related entity will also be refreshed.</li>
+            <li>REMOVE	--> if the parent entity is removed then all its related entity will also be removed.</li>
+            <li>ALL	--> all the above cascade operations can be applied to the entities related to parent entity.</li>
+        </ul>
     </div>
-    <div class="col-lg-6 mb-4">
+    <div class="col-lg-6 mb-4 small">
         <h4>orphanRemoval</h4>
     <p>
        <p> orphanRemoval is an entirely ORM-specific thing. It marks "child" entity to be removed when it's no longer referenced from the "parent" entity, e.g. when you remove the child entity from the corresponding collection of the parent entity.
@@ -144,9 +145,9 @@ import tk.madhavareddy.digitaldiary.persistence.entity.Diary;
 
 import java.util.List;
 
-public interface Dao&amp;ltT&amp;gt {
+public interface Dao&ltT&gt {
     Diary create(T diary);
-    List&amp;ltT&amp;gt getAll();
+    List&ltT&gt getAll();
 }
  </code></pre>
         <h4 class="card-title"><a href="#">Diary Dao Implementation class</a></h4>
@@ -161,7 +162,7 @@ import tk.madhavareddy.digitaldiary.persistence.repository.DigitalDiaryRepositor
 
 import java.util.List;
 @Service
-public class DiaryDaoImpl implements Dao&amp;ltDiary&amp;gt {
+public class DiaryDaoImpl implements Dao&ltDiary&gt {
     private final DigitalDiaryRepository digitalDiaryRepository;
     @Autowired
     public DiaryDaoImpl(DigitalDiaryRepository digitalDiaryRepository){
@@ -172,7 +173,7 @@ public class DiaryDaoImpl implements Dao&amp;ltDiary&amp;gt {
         return digitalDiaryRepository.save(diary);
     }
     @Override
-    public List&amp;ltDiary&amp;gt getAll() {
+    public List&ltDiary&gt getAll() {
         return digitalDiaryRepository.findAll();
     }
 }
@@ -186,7 +187,7 @@ import org.springframework.stereotype.Repository;
 import tk.madhavareddy.digitaldiary.persistence.entity.Diary;
 
 @Repository
-    public interface DigitalDiaryRepository extends JpaRepository&amp;ltDiary, <b class="bg-warning">Integer</b>&amp;gt {
+    public interface DigitalDiaryRepository extends JpaRepository&ltDiary, <b class="bg-warning">Integer</b>&gt {
 }</code></pre>
     </div>
 </div>

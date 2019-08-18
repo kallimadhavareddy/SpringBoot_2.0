@@ -10,17 +10,15 @@ import java.time.LocalDate;
 @Table(name="DIGITAL_DIARY")
 @Data
 public class Diary {
-    @Id
-    @GeneratedValue
-    @Column(name="DD_ID")
-    int id;
+    @EmbeddedId
+    CompositeIdentity compositeIdentity;
     @Column(name="CONTENT")
     String content;
     @Column(name="CONTENT_DATE")
     LocalDate contentDate;
-    @OneToOne(fetch=FetchType.LAZY,cascade = CascadeType.ALL, mappedBy = "diary")
-    Location location;
     @Enumerated
     @Column(name="STATUS")
+
+@OneToOne
     Status status;
 }
