@@ -1,0 +1,375 @@
+<style type="text/css">.article-ratings-social-share{
+    visibility: hidden;
+}
+ul {
+    list-style-type: none;
+}
+code {
+    display: block;
+    font-family: monospace;
+    white-space: pre;
+    margin: 1em 0;
+}
+</style>
+<div class="row">
+    <div class="col-lg-6 mb-4 small">
+        <h4>What is OAuth 2.0</h4>
+        <p>
+            OAuth 2.0 logoOAuth 2.0 is the industry-standard protocol for authorization. OAuth 2.0 supersedes the work done on the original OAuth protocol created in 2006. OAuth 2.0 focuses on client developer simplicity while providing specific authorization flows for web applications, desktop applications, mobile phones, and living room devices.
+        </p>
+    </div>
+    <div class="col-lg-6 mb-4 small">
+        <h4>Oauth 2.0 Flow</h4>
+        <pre><code>
+        </code></pre>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6 mb-4">
+        <h4>User Entity to store passwords during application startup</h4>
+        <pre><code>
+package tk.madhavareddy.digitaldiary.persistence.entity;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+@Data
+@Entity
+<b class="bg-info">@Table(name = "tbl_user")</b>
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+    @Column
+    private String username;
+    @Column
+    @JsonIgnore
+    private String password;
+    @Column
+    private long salary;
+    @Column
+    private int age;
+}
+        </code></pre>
+        <h4>Dao Interface</h4>
+        <pre><code>
+package tk.madhavareddy.digitaldiary.persistence.dao;
+
+import tk.madhavareddy.digitaldiary.persistence.entity.User;
+
+import java.util.List;
+
+public interface UserDao {
+    User save(User user);
+    List&lt;User&gt; findAll();
+    void delete(long id);
+    User findByName(String name);
+}
+        </code></pre>
+    </div>
+    <div class="col-lg-6 mb-4">
+
+        <h4>User Dao Implementation</h4>
+        <pre><code>
+package tk.madhavareddy.digitaldiary.persistence.dao.impl;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import tk.madhavareddy.digitaldiary.persistence.dao.Dao;
+
+import tk.madhavareddy.digitaldiary.persistence.dao.UserDao;
+import tk.madhavareddy.digitaldiary.persistence.entity.User;
+import tk.madhavareddy.digitaldiary.persistence.repository.UserRepository;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Repository
+public class UserDaoImpl  implements UserDao {
+    private final UserRepository userRepository;
+    @Autowired
+    public UserDaoImpl(UserRepository userRepository){
+        this.userRepository= userRepository;
+    }
+    @Override
+    public User save(User user) {
+        return userRepository.save(user);
+    }
+
+    @Override
+    public List&lt;User&gt; findAll() {
+        List&lt;User&gt; list = new ArrayList<>();
+        userRepository.findAll().iterator().forEachRemaining(list::add);
+        return list;
+    }
+
+    @Override
+    public void delete(long id) {
+    }
+
+    @Override
+    public User findByName(String name){
+        return userRepository.findByUsername(name);
+    }
+}
+
+</code></pre>
+        <h4>User Repository</h4>
+        <pre><code>
+package tk.madhavareddy.digitaldiary.persistence.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import tk.madhavareddy.digitaldiary.persistence.entity.Diary;
+
+@Repository
+public interface DigitalDiaryRepository extends JpaRepository&lt;Diary, Integer&gt; {
+}
+</code></pre>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6 mb-4 small">
+        <h4>AuthorizationServerConfig</h4>
+        <pre><code class="bg-info">
+package tk.madhavareddy.digitaldiary.config;
+
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
+import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
+import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
+import org.springframework.security.oauth2.provider.approval.UserApprovalHandler;
+import org.springframework.security.oauth2.provider.token.TokenStore;
+
+@Configuration
+@EnableAuthorizationServer
+@Slf4j
+public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
+    private static final String CLIENT_ID = "digital-diary-client";
+    private static final String CLIENT_SECRET = "{noop}digital-diary-secret";
+    private static final String GRANT_TYPE = "password";
+    private static final String SCOPE_READ = "read";
+    private static final String SCOPE_WRITE = "write";
+    private static final int ACCESS_TOKEN_VALIDITY_SECONDS = 1 * 60 * 60;
+    private static final int REFRESH_TOKEN_VALIDITY_SECONDS = 6 * 60 * 60;
+
+    private final TokenStore tokenStore;
+    private final UserApprovalHandler userApprovalHandler;
+    private final AuthenticationManager authenticationManager;
+
+    @Autowired
+    public AuthorizationServerConfig(TokenStore tokenStore, UserApprovalHandler userApprovalHandler, AuthenticationManager authenticationManager) {
+        this.tokenStore = tokenStore;
+        this.userApprovalHandler = userApprovalHandler;
+        this.authenticationManager = authenticationManager;
+    }
+
+    @Override
+    public void configure(ClientDetailsServiceConfigurer configurer) throws Exception {
+        configurer
+                .inMemory()
+                .withClient(CLIENT_ID)
+                .secret(CLIENT_SECRET)
+                .authorizedGrantTypes(GRANT_TYPE)
+                .scopes(SCOPE_READ, SCOPE_WRITE)
+                .accessTokenValiditySeconds(ACCESS_TOKEN_VALIDITY_SECONDS).
+                refreshTokenValiditySeconds(REFRESH_TOKEN_VALIDITY_SECONDS);
+    }
+
+    @Override
+    public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
+         endpoints.tokenStore(tokenStore).userApprovalHandler(userApprovalHandler)
+                .authenticationManager(authenticationManager);
+    }
+}
+        </code></pre>
+    </div>
+    <div class="col-lg-6 mb-4 small">
+        <h4>ResourceServerConfig</h4>
+        <pre><code class="bg-info">
+package tk.madhavareddy.digitaldiary.config;
+
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
+import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
+import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHandler;
+
+@Configuration
+@EnableResourceServer
+@Slf4j
+public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
+    private static final String RESOURCE_ID = "resource_id";
+    private static final String SECURED_PATTERN = "/users/**";
+
+    @Override
+    public void configure(ResourceServerSecurityConfigurer resources) {
+        resources.resourceId(RESOURCE_ID).stateless(false);
+    }
+
+    @Override
+    public void configure(HttpSecurity http) throws Exception {
+        http.anonymous().disable()
+        .authorizeRequests()
+        .antMatchers(SECURED_PATTERN).access("hasRole('ADMIN')")
+                .antMatchers("/diaries/**").access("hasRole('ADMIN')")
+        .and().exceptionHandling().accessDeniedHandler(new OAuth2AccessDeniedHandler());
+    }
+
+}
+        </code></pre>
+        <h4>SecurityConfig</h4>
+        <pre><code class="bg-info">
+package tk.madhavareddy.digitaldiary.config;
+
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.provider.ClientDetailsService;
+import org.springframework.security.oauth2.provider.approval.ApprovalStore;
+import org.springframework.security.oauth2.provider.approval.TokenApprovalStore;
+import org.springframework.security.oauth2.provider.approval.TokenStoreUserApprovalHandler;
+import org.springframework.security.oauth2.provider.request.DefaultOAuth2RequestFactory;
+import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
+
+import javax.annotation.Resource;
+
+@Configuration
+@EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
+@Slf4j
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Resource(name = "userService")
+    private UserDetailsService userDetailsService;
+
+    private final ClientDetailsService clientDetailsService;
+
+    @Autowired
+    public SecurityConfig(ClientDetailsService clientDetailsService) {
+        this.clientDetailsService = clientDetailsService;
+    }
+
+    @Override
+    @Bean
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Autowired
+    public void globalUserDetails(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService)
+                .passwordEncoder(encoder());
+    }
+
+    /*@Bean
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+        authenticationProvider.setUserDetailsService(userDetailsService());
+        authenticationProvider.setPasswordEncoder(passwordEncoder());
+        return authenticationProvider;
+    }*/
+
+  /*  @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService).passwordEncoder(encoder());*//*.and().authenticationProvider(authenticationProvider());*//*
+    }*/
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                .csrf().disable()
+                .anonymous().disable()
+                .authorizeRequests()
+                .antMatchers("/api-docs/**").permitAll();
+    }
+
+    @Bean
+    public TokenStore tokenStore() {
+        return new InMemoryTokenStore();
+    }
+
+    @Bean
+    @Autowired
+    public TokenStoreUserApprovalHandler userApprovalHandler(TokenStore tokenStore) {
+        TokenStoreUserApprovalHandler handler = new TokenStoreUserApprovalHandler();
+        handler.setTokenStore(tokenStore);
+        handler.setRequestFactory(new DefaultOAuth2RequestFactory(clientDetailsService));
+        handler.setClientDetailsService(clientDetailsService);
+        return handler;
+    }
+
+    @Bean
+    @Autowired
+    public ApprovalStore approvalStore(TokenStore tokenStore) {
+        TokenApprovalStore store = new TokenApprovalStore();
+        store.setTokenStore(tokenStore);
+        return store;
+    }
+
+    @Bean
+    public BCryptPasswordEncoder encoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public FilterRegistrationBean corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true);
+        config.addAllowedOrigin("*");
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("*");
+        source.registerCorsConfiguration("/**", config);
+        FilterRegistrationBean bean = new FilterRegistrationBean(new CorsFilter(source));
+        bean.setOrder(0);
+        return bean;
+    }
+}
+</code></pre>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6 mb-4 small">
+        <h4>How to request token</h4>
+        <img src="images/DIGITAL_DIARY/SpringBoot_2.0/Oauth_2_0/Oauth2_0_GenerateToken.png" alt=""/>
+
+    </div>
+    <div class="col-lg-6 mb-4 small">
+        <h4>How to use token to get resources</h4>
+        <img src="images/DIGITAL_DIARY/SpringBoot_2.0/Oauth_2_0/Oauth2_0AccssingResources.png" alt=""/>
+
+    </div>
+</div>
