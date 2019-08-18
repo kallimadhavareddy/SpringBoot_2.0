@@ -1,14 +1,24 @@
 package tk.madhavareddy.digitaldiary.persistence.entity;
 
-import lombok.Data;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import tk.madhavareddy.digitaldiary.persistence.model.Status;
 
-import javax.persistence.*;
+
+import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.Enumerated;
+import javax.persistence.Table;
 import java.time.LocalDate;
 
 @Entity
 @Table(name="DIGITAL_DIARY")
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 public class Diary {
     @EmbeddedId
     CompositeIdentity compositeIdentity;
@@ -18,7 +28,5 @@ public class Diary {
     LocalDate contentDate;
     @Enumerated
     @Column(name="STATUS")
-
-@OneToOne
     Status status;
 }
