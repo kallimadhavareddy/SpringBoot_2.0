@@ -2,6 +2,7 @@ package tk.madhavareddy.digitaldiary.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
@@ -15,13 +16,20 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 @EnableAuthorizationServer
 @Slf4j
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
-    private static final String CLIENT_ID = "digital-diary-client";
-    private static final String CLIENT_SECRET = "{noop}digital-diary-secret";
-    private static final String GRANT_TYPE = "password";
-    private static final String SCOPE_READ = "read";
-    private static final String SCOPE_WRITE = "write";
-    private static final int ACCESS_TOKEN_VALIDITY_SECONDS = 1 * 60 * 60;
-    private static final int REFRESH_TOKEN_VALIDITY_SECONDS = 6 * 60 * 60;
+    @Value("${user.oauth.clientId}")
+    private String ClientId;
+    @Value("${user.oauth.clientSecret}")
+    private String ClientSecret;
+    @Value("${user.oauth.gratType}")
+    private String GrantType;
+    @Value("${user.oauth.scopeRead}")
+    private String ScopeRead;
+    @Value("${user.oauth.scopeWrite}")
+    private String ScopeWrite;
+    @Value("${user.oauth.accessTokenValidity}")
+    private int AccessTokenValiditySeconds;
+    @Value("${user.oauth.refreshTokenValidity}")
+    private int RefreshTokenValiditySeconds;
 
     private final TokenStore tokenStore;
     private final UserApprovalHandler userApprovalHandler;
@@ -38,12 +46,12 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public void configure(ClientDetailsServiceConfigurer configurer) throws Exception {
         configurer
                 .inMemory()
-                .withClient(CLIENT_ID)
-                .secret(CLIENT_SECRET)
-                .authorizedGrantTypes(GRANT_TYPE)
-                .scopes(SCOPE_READ, SCOPE_WRITE)
-                .accessTokenValiditySeconds(ACCESS_TOKEN_VALIDITY_SECONDS).
-                refreshTokenValiditySeconds(REFRESH_TOKEN_VALIDITY_SECONDS);
+                .withClient(ClientId)
+                .secret(ClientSecret)
+                .authorizedGrantTypes(GrantType)//it could be (Authorization Code,Implicit,Password,Client Credentials,Device Code,Refresh Token)
+                .scopes(ScopeRead, ScopeWrite)
+                .accessTokenValiditySeconds(AccessTokenValiditySeconds)
+                .refreshTokenValiditySeconds(RefreshTokenValiditySeconds);
     }
 
     @Override

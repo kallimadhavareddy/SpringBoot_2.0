@@ -9,23 +9,43 @@ code {
     font-family: monospace;
     white-space: pre;
     margin: 1em 0;
-}
-</style>
+}</style>
 <div class="row">
     <div class="col-lg-6 mb-4 small">
         <h4>What is OAuth 2.0</h4>
-        <p>
-            OAuth 2.0 logoOAuth 2.0 is the industry-standard protocol for authorization. OAuth 2.0 supersedes the work done on the original OAuth protocol created in 2006. OAuth 2.0 focuses on client developer simplicity while providing specific authorization flows for web applications, desktop applications, mobile phones, and living room devices.
-        </p>
+        <p>OAuth 2.0 logoOAuth 2.0 is the industry-standard protocol for authorization. OAuth 2.0 supersedes the work done on the original OAuth protocol created in 2006. OAuth 2.0 focuses on client developer simplicity while providing specific authorization flows for web applications, desktop applications, mobile phones, and living room devices.</p>
     </div>
     <div class="col-lg-6 mb-4 small">
         <h4>Oauth 2.0 Flow</h4>
-        <pre><code>
-        </code></pre>
-    </div>
+        <img src="images/DIGITAL_DIARY/SpringBoot_2.0/Oauth_2_0/oauth2-generic-flow.png" alt="oauth2 generic flow" width="483" height="249" /></div>
 </div>
 <div class="row">
     <div class="col-lg-6 mb-4">
+        <h4>application.properties</h4>
+        <pre><code class="bg-warning">
+server.port=8080
+spring.main.banner-mode=off
+logging.level.root=WARN
+logging.level.tk.madhavareddy.digitaldiary=INFO
+
+spring.datasource.url=jdbc:h2:mem:reddydb
+spring.datasource.driverClassName=org.h2.Driver
+spring.datasource.username=sa
+spring.datasource.password=
+
+spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
+spring.h2.console.enabled=true
+spring.jpa.hibernate.ddl-auto=create-drop
+spring.h2.console.path=/h2-console
+
+user.oauth.clientId=digital-diary-client
+user.oauth.clientSecret={noop}digital-diary-secret
+user.oauth.gratType=password
+user.oauth.scopeRead=read
+user.oauth.scopeWrite=write
+user.oauth.accessTokenValidity=3600
+user.oauth.refreshTokenValidity=21600
+        </code></pre>
         <h4>User Entity to store passwords during application startup</h4>
         <pre><code>
 package tk.madhavareddy.digitaldiary.persistence.entity;
@@ -72,9 +92,24 @@ public interface UserDao {
     User findByName(String name);
 }
         </code></pre>
+        <h4>UserService</h4>
+        <pre><code>
+package tk.madhavareddy.digitaldiary.process.service;
+
+
+
+import tk.madhavareddy.digitaldiary.persistence.entity.User;
+
+import java.util.List;
+
+public interface UserService {
+    User save(User user);
+    List<User> findAll();
+}
+
+        </code></pre>
     </div>
     <div class="col-lg-6 mb-4">
-
         <h4>User Dao Implementation</h4>
         <pre><code>
 package tk.madhavareddy.digitaldiary.persistence.dao.impl;
@@ -104,7 +139,7 @@ public class UserDaoImpl  implements UserDao {
 
     @Override
     public List&lt;User&gt; findAll() {
-        List&lt;User&gt; list = new ArrayList<>();
+        List&lt;User&gt; list = new ArrayList&lt;&gt;();
         userRepository.findAll().iterator().forEachRemaining(list::add);
         return list;
     }
@@ -132,6 +167,55 @@ import tk.madhavareddy.digitaldiary.persistence.entity.Diary;
 public interface DigitalDiaryRepository extends JpaRepository&lt;Diary, Integer&gt; {
 }
 </code></pre>
+        <h4>UserServiceImpl implements UserDetailsService</h4>
+        <pre><code class="small">
+package tk.madhavareddy.digitaldiary.process.service.imp;
+
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+import tk.madhavareddy.digitaldiary.persistence.dao.UserDao;
+import tk.madhavareddy.digitaldiary.persistence.entity.User;
+import tk.madhavareddy.digitaldiary.process.service.UserService;
+
+import java.util.Collections;
+import java.util.List;
+
+<b class="bg-warning">@Service(value = "userService")</b>
+public class UserServiceImpl implements <b class="bg-warning">UserDetailsService</b>, UserService {
+    private final UserDao userDao;
+    @Autowired
+    public UserServiceImpl(UserDao userDao) {
+        this.userDao = userDao;
+    }
+<b class="bg-warning">
+    public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
+        User user = userDao.findByName(userId);
+        if (user == null) {
+            throw new UsernameNotFoundException("Invalid username or password.");
+        }
+        return new org.springframework.security.core.userdetails.User(String.valueOf(user.getId()), user.getPassword(), getAuthority());
+    }
+    private List&lt;SimpleGrantedAuthority&gt; getAuthority() {
+        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_ADMIN"));
+    }
+</b>
+    @Override
+    public User save(User user) {
+        return userDao.save(user);
+    }
+
+    @Override
+    public List&lt;User&gt; findAll() {
+        return userDao.findAll();
+    }
+}
+
+        </code></pre>
     </div>
 </div>
 <div class="row">
@@ -142,6 +226,7 @@ package tk.madhavareddy.digitaldiary.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
@@ -155,13 +240,20 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 @EnableAuthorizationServer
 @Slf4j
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
-    private static final String CLIENT_ID = "digital-diary-client";
-    private static final String CLIENT_SECRET = "{noop}digital-diary-secret";
-    private static final String GRANT_TYPE = "password";
-    private static final String SCOPE_READ = "read";
-    private static final String SCOPE_WRITE = "write";
-    private static final int ACCESS_TOKEN_VALIDITY_SECONDS = 1 * 60 * 60;
-    private static final int REFRESH_TOKEN_VALIDITY_SECONDS = 6 * 60 * 60;
+    @Value("${user.oauth.clientId}")
+    private String ClientId;
+    @Value("${user.oauth.clientSecret}")
+    private String ClientSecret;
+    @Value("${user.oauth.gratType}")
+    private String GrantType;
+    @Value("${user.oauth.scopeRead}")
+    private String ScopeRead;
+    @Value("${user.oauth.scopeWrite}")
+    private String ScopeWrite;
+    @Value("${user.oauth.accessTokenValidity}")
+    private int AccessTokenValiditySeconds;
+    @Value("${user.oauth.refreshTokenValidity}")
+    private int RefreshTokenValiditySeconds;
 
     private final TokenStore tokenStore;
     private final UserApprovalHandler userApprovalHandler;
@@ -178,12 +270,12 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public void configure(ClientDetailsServiceConfigurer configurer) throws Exception {
         configurer
                 .inMemory()
-                .withClient(CLIENT_ID)
-                .secret(CLIENT_SECRET)
-                .authorizedGrantTypes(GRANT_TYPE)
-                .scopes(SCOPE_READ, SCOPE_WRITE)
-                .accessTokenValiditySeconds(ACCESS_TOKEN_VALIDITY_SECONDS).
-                refreshTokenValiditySeconds(REFRESH_TOKEN_VALIDITY_SECONDS);
+                .withClient(ClientId)
+                .secret(ClientSecret)
+                .authorizedGrantTypes(GrantType)//it could be (Authorization Code,Implicit,Password,Client Credentials,Device Code,Refresh Token)
+                .scopes(ScopeRead, ScopeWrite)
+                .accessTokenValiditySeconds(AccessTokenValiditySeconds)
+                .refreshTokenValiditySeconds(RefreshTokenValiditySeconds);
     }
 
     @Override
@@ -193,8 +285,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     }
 }
         </code></pre>
-    </div>
-    <div class="col-lg-6 mb-4 small">
         <h4>ResourceServerConfig</h4>
         <pre><code class="bg-info">
 package tk.madhavareddy.digitaldiary.config;
@@ -230,6 +320,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
 }
         </code></pre>
+    </div>
+    <div class="col-lg-6 mb-4 small">
         <h4>SecurityConfig</h4>
         <pre><code class="bg-info">
 package tk.madhavareddy.digitaldiary.config;
@@ -364,12 +456,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 <div class="row">
     <div class="col-lg-6 mb-4 small">
         <h4>How to request token</h4>
-        <img src="images/DIGITAL_DIARY/SpringBoot_2.0/Oauth_2_0/Oauth2_0_GenerateToken.png" alt=""/>
-
-    </div>
+        <img src="images/DIGITAL_DIARY/SpringBoot_2.0/Oauth_2_0/Oauth2_0_GenerateToken.png" alt="" /></div>
     <div class="col-lg-6 mb-4 small">
         <h4>How to use token to get resources</h4>
-        <img src="images/DIGITAL_DIARY/SpringBoot_2.0/Oauth_2_0/Oauth2_0AccssingResources.png" alt=""/>
-
-    </div>
+        <img src="images/DIGITAL_DIARY/SpringBoot_2.0/Oauth_2_0/Oauth2_0AccssingResources.png" alt="" /></div>
 </div>
