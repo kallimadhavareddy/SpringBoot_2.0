@@ -1,4 +1,4 @@
-13_Oauth2_0.html<style type="text/css">.article-ratings-social-share{
+<style type="text/css">.article-ratings-social-share{
     visibility: hidden;
 }
 ul {
@@ -13,9 +13,9 @@ code {
 <div class="row">
     <div class="col-lg-6 mb-4 small">
         <h4>What is Basic Auth</h4>
-        <p>Basic Auth</p>
+        <p>basic access authentication is a method for an HTTP user agent (e.g. a web browser) to provide a user name and password when making a request.</p>
         <h4>How to generate BCrypt password</h4>
-        <p>go to <b>https://bcrypt-generator.com/</b> and enter your password an generate hash </p>
+        <p>go to <b>https://bcrypt-generator.com/</b> and enter your password an generate hash</p>
         <p><b class="bg-danger">$2y</b>$04$.CH3AV5YS5xffY6gYIKogeaeRLacmWOUxGa9jzahU1H7jQM2ydWxC</p>
         <p>Replace 2y with 2a and store in db</p>
         <p><b class="bg-warning">$2a</b>$04$.CH3AV5YS5xffY6gYIKogeaeRLacmWOUxGa9jzahU1H7jQM2ydWxC</p>
@@ -101,7 +101,7 @@ import java.util.List;
 
 public interface UserService {
     User save(User user);
-    List<User> findAll();
+    List findAll();
 }
 
         </code></pre>
@@ -217,12 +217,13 @@ public class UserServiceImpl implements <b class="bg-warning">UserDetailsService
 </div>
 <div class="row">
     <div class="col-lg-6 mb-4 small">
-      <pre> <code class="bg-info">
+<pre><code>
 package tk.madhavareddy.digitaldiary.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -232,37 +233,39 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import javax.annotation.Resource;
 
 @Configuration
+
+
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    @Resource(name = "userService")
+    <b class="bg-warning">@Resource(name = "userService")
     private UserDetailsService userDetailsService;
     @Autowired
     public void globalUserDetails(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService)
                 .passwordEncoder(passwordEncoder());
-    }
+    }</b>
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+    <b class="bg-info">      
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .anyRequest().fullyAuthenticated()
+
+        http.httpBasic()
                 .and()
-                .httpBasic();
+                .authorizeRequests()
+                .antMatchers(HttpMethod.GET, "/diaries/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST, "/diaries").hasRole("ADMIN")
+                .antMatchers(HttpMethod.PUT, "/diaries/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.PATCH, "/diaries/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE, "/diaries/**").hasRole("ADMIN")
+                .and()
+                .csrf().disable()
+                .formLogin().disable();
     }
-}</code></pre>
+    </b>    
+}
+</code></pre>
     </div>
-    <div class="col-lg-6 mb-4 small">
-      <pre> <code>
-        </code></pre>
-    </div>
-</div>
-<div class="row">
-    <div class="col-lg-6 mb-4 small">
-        <h4>How to request token</h4>
-        <img src="images/DIGITAL_DIARY/SpringBoot_2.0/Oauth_2_0/Oauth2_0_GenerateToken.png" alt="" /></div>
-    <div class="col-lg-6 mb-4 small">
-        <h4>How to use token to get resources</h4>
-        <img src="images/DIGITAL_DIARY/SpringBoot_2.0/Oauth_2_0/Oauth2_0AccssingResources.png" alt="" /></div>
+    <div class="col-lg-6 mb-4 small"><img src="images/DIGITAL_DIARY/SpringBoot_2.0/security/basicauth/basic-auth.png" alt="basic auth" /></div>
 </div>
