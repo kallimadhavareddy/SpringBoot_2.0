@@ -8,9 +8,10 @@ import tk.madhavareddy.digitaldiary.persistence.model.Status;
 
 
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.persistence.Table;
 import java.time.LocalDate;
 
@@ -20,8 +21,9 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 public class Diary {
-    @EmbeddedId
-    CompositeIdentity compositeIdentity;
+    @Id
+    @GeneratedValue
+    int id;
     @Column(name="CONTENT")
     String content;
     @Column(name="CONTENT_DATE")
