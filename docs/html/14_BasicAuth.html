@@ -1,0 +1,271 @@
+<style type="text/css">.article-ratings-social-share{
+    visibility: hidden;
+}
+ul {
+    list-style-type: none;
+}
+code {
+    display: block;
+    font-family: monospace;
+    white-space: pre;
+    margin: 1em 0;
+}</style>
+<div class="row">
+    <div class="col-lg-6 mb-4 small">
+        <h4>What is Basic Auth</h4>
+        <p>basic access authentication is a method for an HTTP user agent (e.g. a web browser) to provide a user name and password when making a request.</p>
+        <h4>How to generate BCrypt password</h4>
+        <p>go to <b>https://bcrypt-generator.com/</b> and enter your password an generate hash</p>
+        <p><b class="bg-danger">$2y</b>$04$.CH3AV5YS5xffY6gYIKogeaeRLacmWOUxGa9jzahU1H7jQM2ydWxC</p>
+        <p>Replace 2y with 2a and store in db</p>
+        <p><b class="bg-warning">$2a</b>$04$.CH3AV5YS5xffY6gYIKogeaeRLacmWOUxGa9jzahU1H7jQM2ydWxC</p>
+    </div>
+    <div class="col-lg-6 mb-4 small">
+        <h4>Basic Auth Flow</h4>
+        <img src="images/DIGITAL_DIARY/SpringBoot_2.0/BasicAuth/basic-auth-flow.png" alt="oauth2 generic flow" width="483" height="249" /></div>
+</div>
+<div class="row">
+    <div class="col-lg-6 mb-4">
+        <h4>application.properties</h4>
+        <pre><code class="bg-warning">
+server.port=8080
+spring.main.banner-mode=off
+logging.level.root=WARN
+logging.level.tk.madhavareddy.digitaldiary=INFO
+
+spring.datasource.url=jdbc:h2:mem:reddydb
+spring.datasource.driverClassName=org.h2.Driver
+spring.datasource.username=sa
+spring.datasource.password=
+
+spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
+spring.h2.console.enabled=true
+spring.jpa.hibernate.ddl-auto=create-drop
+spring.h2.console.path=/h2-console
+        </code></pre>
+        <h4>User Entity to store passwords during application startup</h4>
+        <pre><code>
+package tk.madhavareddy.digitaldiary.persistence.entity;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+@Data
+@Entity
+<b class="bg-info">@Table(name = "tbl_user")</b>
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+    @Column
+    private String username;
+    @Column
+    @JsonIgnore
+    private String password;
+    @Column
+    private long salary;
+    @Column
+    private int age;
+}
+        </code></pre>
+        <h4>Dao Interface</h4>
+        <pre><code>
+package tk.madhavareddy.digitaldiary.persistence.dao;
+
+import tk.madhavareddy.digitaldiary.persistence.entity.User;
+
+import java.util.List;
+
+public interface UserDao {
+    User save(User user);
+    List&lt;User&gt; findAll();
+    void delete(long id);
+    User findByName(String name);
+}
+        </code></pre>
+        <h4>UserService</h4>
+        <pre><code>
+package tk.madhavareddy.digitaldiary.process.service;
+
+
+
+import tk.madhavareddy.digitaldiary.persistence.entity.User;
+
+import java.util.List;
+
+public interface UserService {
+    User save(User user);
+    List findAll();
+}
+
+        </code></pre>
+    </div>
+    <div class="col-lg-6 mb-4">
+        <h4>User Dao Implementation</h4>
+        <pre><code>
+package tk.madhavareddy.digitaldiary.persistence.dao.impl;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import tk.madhavareddy.digitaldiary.persistence.dao.Dao;
+
+import tk.madhavareddy.digitaldiary.persistence.dao.UserDao;
+import tk.madhavareddy.digitaldiary.persistence.entity.User;
+import tk.madhavareddy.digitaldiary.persistence.repository.UserRepository;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Repository
+public class UserDaoImpl  implements UserDao {
+    private final UserRepository userRepository;
+    @Autowired
+    public UserDaoImpl(UserRepository userRepository){
+        this.userRepository= userRepository;
+    }
+    @Override
+    public User save(User user) {
+        return userRepository.save(user);
+    }
+
+    @Override
+    public List&lt;User&gt; findAll() {
+        List&lt;User&gt; list = new ArrayList&lt;&gt;();
+        userRepository.findAll().iterator().forEachRemaining(list::add);
+        return list;
+    }
+
+    @Override
+    public void delete(long id) {
+    }
+
+    @Override
+    public User findByName(String name){
+        return userRepository.findByUsername(name);
+    }
+}
+
+</code></pre>
+        <h4>User Repository</h4>
+        <pre><code>
+package tk.madhavareddy.digitaldiary.persistence.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import tk.madhavareddy.digitaldiary.persistence.entity.Diary;
+
+@Repository
+public interface DigitalDiaryRepository extends JpaRepository&lt;Diary, Integer&gt; {
+}
+</code></pre>
+        <h4>UserServiceImpl implements UserDetailsService</h4>
+        <pre><code class="small">
+package tk.madhavareddy.digitaldiary.process.service.imp;
+
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+import tk.madhavareddy.digitaldiary.persistence.dao.UserDao;
+import tk.madhavareddy.digitaldiary.persistence.entity.User;
+import tk.madhavareddy.digitaldiary.process.service.UserService;
+
+import java.util.Collections;
+import java.util.List;
+
+<b class="bg-warning">@Service(value = "userService")</b>
+public class UserServiceImpl implements <b class="bg-warning">UserDetailsService</b>, UserService {
+    private final UserDao userDao;
+    @Autowired
+    public UserServiceImpl(UserDao userDao) {
+        this.userDao = userDao;
+    }
+<b class="bg-warning">
+    public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
+        User user = userDao.findByName(userId);
+        if (user == null) {
+            throw new UsernameNotFoundException("Invalid username or password.");
+        }
+        return new org.springframework.security.core.userdetails.User(String.valueOf(user.getId()), user.getPassword(), getAuthority());
+    }
+    private List&lt;SimpleGrantedAuthority&gt; getAuthority() {
+        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_ADMIN"));
+    }
+</b>
+    @Override
+    public User save(User user) {
+        return userDao.save(user);
+    }
+
+    @Override
+    public List&lt;User&gt; findAll() {
+        return userDao.findAll();
+    }
+}
+
+        </code></pre>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6 mb-4 small">
+<pre><code>
+package tk.madhavareddy.digitaldiary.config;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import javax.annotation.Resource;
+
+@Configuration
+
+
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    <b class="bg-warning">@Resource(name = "userService")
+    private UserDetailsService userDetailsService;
+    @Autowired
+    public void globalUserDetails(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService)
+                .passwordEncoder(passwordEncoder());
+    }</b>
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+    <b class="bg-info">      
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+
+        http.httpBasic()
+                .and()
+                .authorizeRequests()
+                .antMatchers(HttpMethod.GET, "/diaries/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST, "/diaries").hasRole("ADMIN")
+                .antMatchers(HttpMethod.PUT, "/diaries/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.PATCH, "/diaries/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE, "/diaries/**").hasRole("ADMIN")
+                .and()
+                .csrf().disable()
+                .formLogin().disable();
+    }
+    </b>    
+}
+</code></pre>
+    </div>
+    <div class="col-lg-6 mb-4 small"><img src="images/DIGITAL_DIARY/SpringBoot_2.0/security/basicauth/basic-auth.png" alt="basic auth" /></div>
+</div>

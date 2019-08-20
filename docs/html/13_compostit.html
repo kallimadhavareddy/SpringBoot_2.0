@@ -1,0 +1,168 @@
+<style type="text/css">.article-ratings-social-share{
+    visibility: hidden;
+}
+ul {
+    list-style-type: none;
+}
+code {
+    display: block;
+    font-family: monospace;
+    white-space: pre;
+    margin: 1em 0;
+}
+</style>
+<div class="row">
+    <div class="col-lg-6 mb-4 small">
+        <h4>Composite key table structure</h4>
+        <img src="images/DIGITAL_DIARY/SpringBoot_2.0/JPA/CompositeKey/composite-key.png" alt="composite key" />
+    </div>
+    <div class="col-lg-6 mb-4 small">
+        <h4>What is composite key</h4>
+        <p>A composite key is a set of more than one key that, together, uniquely identifies each record.</p>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6 mb-4">
+        <h4 class="card-title"><a href="#">Entity Class Dairy</a></h4>
+        <pre><code>package tk.madhavareddy.digitaldiary.persistence.entity;
+
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import tk.madhavareddy.digitaldiary.persistence.model.Status;
+
+
+import javax.persistence.Column;
+<b class="bg-warning">import javax.persistence.EmbeddedId;</b>
+import javax.persistence.Entity;
+import javax.persistence.Enumerated;
+import javax.persistence.Table;
+import java.time.LocalDate;
+
+@Entity
+@Table(name="DIGITAL_DIARY")
+@Getter
+@Setter
+@NoArgsConstructor
+public class Diary {
+   <b class="bg-warning"> @EmbeddedId
+       CompositeIdentity compositeIdentity;</b>
+    @Column(name="CONTENT")
+    String content;
+    @Column(name="CONTENT_DATE")
+    LocalDate contentDate;
+     <b class="bg-info">
+    @Enumerated
+    @Column(name="STATUS")
+    Status status;
+     </b>
+}</code></pre>
+        <h4 class="card-title"><a href="#">Embedded</a></h4>
+        <pre><code>
+package tk.madhavareddy.digitaldiary.persistence.entity;
+
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import java.io.Serializable;
+
+<b class="bg-warning">
+@Embeddable
+@Setter
+@Getter
+public class CompositeIdentity implements Serializable {
+    @Column(name="COL_1")
+    int idOne;
+    @Column(name="COL_2")
+    int idTwo;
+}
+</b>
+        </code></pre>
+        <h4 class="card-title"><a href="#">Repository</a></h4>
+        <pre><code>
+package tk.madhavareddy.digitaldiary.persistence.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+<b class="bg-warning">import tk.madhavareddy.digitaldiary.persistence.entity.CompositeIdentity;</b>
+import tk.madhavareddy.digitaldiary.persistence.entity.Diary;
+
+@Repository
+public interface DigitalDiaryRepository extends
+            JpaRepository&lt;Diary, <b class="bg-warning">CompositeIdentity</b>&gt; {
+}</code></pre>
+    </div>
+    <div class="col-lg-6 mb-4">
+        <h4 class="card-title"><a href="#">Interface Dao</a></h4>
+        <pre><code>
+package tk.madhavareddy.digitaldiary.persistence.dao;
+
+import tk.madhavareddy.digitaldiary.persistence.entity.Diary;
+
+import java.util.List;
+
+public interface Dao&lt;T&gt; {
+    Diary create(T diary);
+    List&lt;T&gt; getAll();
+}
+ </code></pre>
+        <h4 class="card-title"><a href="#">Diary Dao Implementation class</a></h4>
+        <pre><code>
+            package tk.madhavareddy.digitaldiary.persistence.dao.impl;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import tk.madhavareddy.digitaldiary.persistence.dao.Dao;
+import tk.madhavareddy.digitaldiary.persistence.entity.Diary;
+import tk.madhavareddy.digitaldiary.persistence.repository.DigitalDiaryRepository;
+
+import java.util.List;
+@Service
+public class DiaryDaoImpl implements Dao&lt;Diary&gt; {
+    private final DigitalDiaryRepository digitalDiaryRepository;
+    @Autowired
+    public DiaryDaoImpl(DigitalDiaryRepository digitalDiaryRepository){
+        this.digitalDiaryRepository= digitalDiaryRepository;
+    }
+    @Override
+    public Diary create(Diary diary) {
+        return digitalDiaryRepository.save(diary);
+    }
+    @Override
+    public List&lt;Diary&gt; getAll() {
+        return digitalDiaryRepository.findAll();
+    }
+}</code></pre>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6 mb-4"><h4>One to One</h4>
+        <b></b>GET  http://localhost:8080/diaries/diary</b>
+        <h4>Request Body</h4>
+        <pre><code>{
+	"compositeIdentity":{
+		"idOne":1,
+		"idTwo":1
+	},
+    "content": "Today Content 2",
+    "contentDate": "2019-08-17",
+    "status":"OPEN"
+}
+</code>
+</pre>
+    </div>
+    <div class="col-lg-6 mb-4"><h4>Response Results</h4>
+        <pre><code>{
+    "compositeIdentity": {
+        "idOne": 1,
+        "idTwo": 1
+    },
+    "content": "Today Content 2",
+    "contentDate": "2019-08-17",
+    "status": "OPEN"
+}</code></pre>
+    </div>
+</div>
