@@ -1,0 +1,8 @@
+zuul:
+  routes:
+    create:
+      path: /create/**
+      url: http://localhost:8090/create
+    delete:
+      path: /delete/**
+      url: http://localhost:8090/delete
