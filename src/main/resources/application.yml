@@ -1,7 +1,3 @@
-zuul:
-  routes:
-    producer:
-      serviceId: kmr-hello-client
 spring:
   application:
     name: kmr-zuul-loadbalancer
