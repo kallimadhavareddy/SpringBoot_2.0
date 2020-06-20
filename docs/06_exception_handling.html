@@ -1,0 +1,95 @@
+<div class="container">
+    <div class="row">
+        <p>
+            Exception handling recommended to have in service class , each service class has to handle exceptions
+            You can write your custom exception classes to throw run time exceptions in service classes.
+            @RestControllerAdvice defined at class level will be act as global exception handler ,
+            whenever exception occurred global exception handler class looks for exception defined in the controller advice class and there we send proper error message to customer
+
+        </p>
+        <div class="col-lg-6 mb-4">
+            <div class="card h-150">
+                <div class="card-body small">
+                    <pre><code>@Override
+	public Diary findDiary(int id) {
+		if(diaryDao.getDiaryById(id).isPresent()) {
+			return objectMapperUtils.map(diaryDao.getDiaryById(id).get(),Diary.class);
+		}else{
+			throw new NoRecordsFoundException("given diary id not found");
+		}
+	}
+                    </code></pre>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+            <div class="card h-150">
+                <div class="card-body small">
+                    Write Your custom exception
+                    <pre><code>package tk.madhavareddy.digitaldiary.presentation.exception;
+
+public class NoRecordsFoundException extends RuntimeException {
+    public NoRecordsFoundException(){
+        super();
+    }
+    public NoRecordsFoundException(final String message){
+        super(message);
+    }
+}
+</code></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6 mb-4">
+            <div class="card h-150">
+                <div class="card-body small">
+                    <pre><code>package tk.madhavareddy.digitaldiary.presentation.exception;
+import lombok.Getter;
+import lombok.Setter;
+
+@Setter
+@Getter
+public class ErrorResponse {
+    private int errorStatus;
+    private String errorResponse;
+    private String requestURI;
+}
+                    </code></pre>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+            <div class="card h-150">
+                <div class="card-body small">
+                    <pre><code>package tk.madhavareddy.digitaldiary.presentation.exception;
+
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import javax.servlet.http.HttpServletRequest;
+
+@RestControllerAdvice
+public class ExceptionHandlerControllerAdvise {
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleException(ResourceNotFoundException ex,final HttpServletRequest request) {
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setErrorResponse(ex.getMessage());
+        errorResponse.setErrorStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        errorResponse.setRequestURI(request.getRequestURI());
+        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}</code></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<a href="https://github.com/kallimadhavareddy/SpringBoot_2.0/archive/one-to-one-exception-handling.zip" class="btn btn-primary active" style='width:100%'><i class="fa fa-download"></i>Download Exception Handling example</a>
