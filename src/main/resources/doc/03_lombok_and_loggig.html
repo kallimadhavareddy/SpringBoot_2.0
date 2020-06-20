@@ -1,0 +1,81 @@
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6 mb-4">
+            <div class="card h-150">
+                <div class="card-body">
+                    <h4 class="card-title"><a href="#">lombok maven dependncy</a></h4>
+                    <pre><code>
+                    &lt;dependency>
+                        &lt;groupId&gt;org.projectlombok&lt;/groupId&gt;
+                        &lt;artifactId&gt;lombok&lt;/artifactId&gt;
+                        &lt;version&gt;1.18.2&lt;/version&gt;
+                        &lt;scope&gt;provided&lt;/scope&gt;
+                    &lt;/dependency&gt;
+                    </code></pre>
+                </div>
+            </div>
+            <div class="card h-150">
+                <ul>
+                    <li>@Slf4j Annotation used to avoid boiler plate code to avoid logger class initialization for each and every class</li>
+                    <li>see simple logger usage in service class </li>
+                    <li>sample output logger placed in below </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-lg-6 mb-4">
+            <div class="card h-150">
+                <div class="card-body small">
+                    <pre><code>
+                        package tk.madhavareddy.digitaldiary.process.service.imp;
+
+                import java.time.LocalDate;
+
+                import lombok.extern.slf4j.Slf4j;
+                import org.springframework.stereotype.Service;
+
+                import tk.madhavareddy.digitaldiary.presentation.data.Diary;
+                import tk.madhavareddy.digitaldiary.process.service.DigitalDiaryService;
+                @Service
+                @Slf4j
+                public class DigitalDiaryServiceImpl implements DigitalDiaryService {
+                    @Override
+                    public Diary getDiary(String id) {
+                        log.warn("Warning Log");
+                        log.info("info Log");
+                        log.debug("debug log");
+                        log.error("error log");
+                        Diary diary = new Diary();
+                        if(id.equals("1")) {
+                            diary.setConetent("Hi today is happy day my first digital diary collection is started");
+                            diary.setEventId("EV001");
+                            LocalDate eventDate = LocalDate.now();
+                            diary.setEventDate(eventDate );
+                            diary.setLocation("Brussels");
+                        }
+                        return diary;
+                    }
+                }
+                    </code></pre>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 small">
+            <div class="card h-150">
+                <div class="card-body">
+                    <pre><code>2020-06-20 20:55:02.399  INFO 3988 --- [           main] t.m.d.DigitalDiaryApplication            : Starting DigitalDiaryApplication on DESKTOP-TNS14D6 with PID 3988 (F:\DEV\SpringBoot\SpringBoot_2.0\target\classes started by Aakash in F:\DEV\SpringBoot\SpringBoot_2.0)
+2020-06-20 20:55:02.415  INFO 3988 --- [           main] t.m.d.DigitalDiaryApplication            : No active profile set, falling back to default profiles: default
+2020-06-20 20:55:20.649  WARN 3988 --- [           main] aWebConfiguration$JpaWebMvcConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2020-06-20 20:55:21.180  INFO 3988 --- [           main] t.m.d.DigitalDiaryApplication            : Started DigitalDiaryApplication in 21.687 seconds (JVM running for 24.4)
+2020-06-20 21:19:20.488  WARN 3988 --- [nio-8888-exec-2] t.m.d.p.s.imp.DigitalDiaryServiceImpl    : Warning Log
+2020-06-20 21:19:20.490  INFO 3988 --- [nio-8888-exec-2] t.m.d.p.s.imp.DigitalDiaryServiceImpl    : info Log
+2020-06-20 21:19:20.490 ERROR 3988 --- [nio-8888-exec-2] t.m.d.p.s.imp.DigitalDiaryServiceImpl    : error log
+                   </code></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

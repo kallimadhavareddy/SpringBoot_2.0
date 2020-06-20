@@ -1,0 +1,71 @@
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6 mb-4">
+            <div class="card h-150">
+                <div class="card-body small">
+                    <pre><code>
+                        @PostMapping("/diaries/diary")
+	public Diary createDairy(@RequestBody @Valid Diary diary) {
+		return digitalDiaryService.createDiary(diary);
+	}
+	@GetMapping("/diaries/{status}/status")
+	public List<Diary> getAllDiariesByStatusNative(@PathVariable Integer status) {
+		return digitalDiaryService.getAllDiariesByStatusNative(status);
+	}
+</code></pre>
+                </div>
+            </div>
+            <div class="card h-150">
+                <ul>
+                    <li>@Valid annotation is used to perform certen validations on Data object</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-lg-6 mb-4">
+            <div class="card h-150">
+                <div class="card-body small">
+                    <pre><code>package tk.madhavareddy.digitaldiary.presentation.data;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
+import java.util.Set;
+
+@Setter
+@Getter
+@ToString
+public class Diary {
+    @Min(0)
+    @Max(0)
+    int id;
+    @NotNull
+    private Set<Event> events;
+    @DateTimeFormat
+    private LocalDate contentDate;
+    @NotNull
+    private Location location;
+    private int status;
+}
+                    </code></pre>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 small">
+            <div class="card h-150">
+                <div class="card-body">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
