@@ -1,0 +1,11 @@
+{
+    "id": 0,
+    "content": "Your Content",
+    "contentDate": "2020-06-21",
+    "location": {
+        "longitude": "90",
+        "latitude": "80",
+        "userLocation": "Michel ange",
+        "country": "Belgium"
+    }
+}

@@ -33,7 +33,7 @@ public class DigitalDiaryServiceImpl implements DigitalDiaryService {
 		if(diaryDao.getDiaryById(id).isPresent()) {
 			return objectMapperUtils.map(diaryDao.getDiaryById(id).get(),Diary.class);
 		}else{
-			throw new NoRecordsFoundException("given diary id not found");
+			throw new NoRecordsFoundException("given diary "+id+"not found");
 		}
 	}
 
