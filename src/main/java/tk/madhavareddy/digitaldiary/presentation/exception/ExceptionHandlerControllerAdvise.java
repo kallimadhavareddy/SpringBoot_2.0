@@ -6,11 +6,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import javax.servlet.http.HttpServletRequest;
 
 @RestControllerAdvice
-public class ExceptionHandlerControllerAdvise {
+public class ExceptionHandlerControllerAdvise extends ResponseEntityExceptionHandler{
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleException(ResourceNotFoundException ex,final HttpServletRequest request) {
         ErrorResponse errorResponse = new ErrorResponse();
@@ -21,7 +22,7 @@ public class ExceptionHandlerControllerAdvise {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handleMethodArgumentNotfound(MethodArgumentNotValidException maex, final HttpServletRequest request) {
+    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValid(MethodArgumentNotValidException maex, final HttpServletRequest request) {
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setErrorResponse(maex.getMessage());
         errorResponse.setErrorStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
