@@ -28,4 +28,6 @@ public class ExceptionHandlerControllerAdvise {
         errorResponse.setRequestURI(request.getRequestURI());
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+
 }
