@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -13,12 +14,14 @@ import tk.madhavareddy.digitaldiary.presentation.data.Location;
 import tk.madhavareddy.digitaldiary.presentation.exception.NoRecordsFoundException;
 import tk.madhavareddy.digitaldiary.process.service.DigitalDiaryService;
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import javax.websocket.server.PathParam;
 import java.time.LocalDate;
 import java.util.List;
 
 @RestController
 @Slf4j
+@Validated
 public class DigitalDiaryController {
 
 	private final DigitalDiaryService digitalDiaryService;
@@ -35,7 +38,7 @@ public class DigitalDiaryController {
 		return new ResponseEntity<>(httpHeaders, HttpStatus.CREATED);
 	}
 	@GetMapping("/diaries/{id}")
-	public Diary getDairy(@PathVariable("id") int id) {
+	public Diary getDairy(@PathVariable("id") @Min(1) int id) {
 		try {
 			return digitalDiaryService.findDiary(id);
 		}catch(NoRecordsFoundException ex){
