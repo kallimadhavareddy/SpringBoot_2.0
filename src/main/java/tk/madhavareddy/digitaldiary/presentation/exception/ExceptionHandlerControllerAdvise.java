@@ -40,5 +40,4 @@ public class ExceptionHandlerControllerAdvise{
         errorResponse.setRequestURI(request.getRequestURI());
         return errorResponse ;
     }
-
 }
