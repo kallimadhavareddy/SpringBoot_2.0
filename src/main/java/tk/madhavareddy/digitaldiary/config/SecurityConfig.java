@@ -47,8 +47,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Resource(name = "userService")
     private UserDetailsService userDetailsService;
 
+    private final ClientDetailsService clientDetailsService;
+
     @Autowired
-    private ClientDetailsService clientDetailsService;
+    public SecurityConfig(ClientDetailsService clientDetailsService) {
+        this.clientDetailsService = clientDetailsService;
+    }
 
     @Override
     @Bean
@@ -82,8 +86,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-                .csrf().disable()
+        http.csrf().disable()
                 .anonymous().disable()
                 .authorizeRequests()
                 .antMatchers("/api-docs/**").permitAll();
