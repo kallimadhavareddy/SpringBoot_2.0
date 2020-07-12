@@ -53,4 +53,21 @@ public class DigitalDiaryController {
 		}
 		return allDiaries;
 	}
+
+	@GetMapping("/test")
+	public Diary getTest() {
+		Diary diary = new Diary();
+		Location location = new Location();
+		location.setLatitude("90");
+		location.setLongitude("90");
+		location.setUserLocation("Testing");
+		location.setCountry("YTD");
+
+		diary.setContent("First Content");
+		diary.setContentDate(LocalDate.now());
+		diary.setLocation(location);
+
+		return diary;
+	}
+
 }
