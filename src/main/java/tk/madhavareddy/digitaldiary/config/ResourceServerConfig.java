@@ -8,6 +8,16 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHandler;
 
+/**
+ * Created by IntelliJ IDEA.
+ * Project : spring-boot-security-oauth2-example
+ * User: madhavareddy
+ * Email: kalli.madhavareddy@gmail.com
+ * Date: 05/08/2019
+ * Time: 16.06
+ * To change this template use File | Settings | File Templates.
+ */
+
 @Configuration
 @EnableResourceServer
 @Slf4j

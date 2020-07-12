@@ -1,35 +1,25 @@
 package tk.madhavareddy.digitaldiary.persistence.entity;
 
+import lombok.Data;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import tk.madhavareddy.digitaldiary.persistence.model.Status;
-
-
-import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Set;
 
 @Entity
 @Table(name="DIGITAL_DIARY")
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
 public class Diary {
     @Id
     @GeneratedValue
-    int id;
-    @Column(name="CONTENT")
-    String content;
+    @Column(name="DD_ID")
+    private int id;
+    @OneToMany(fetch=FetchType.EAGER,cascade=CascadeType.ALL, mappedBy = "diary")
+    private Set<Event> events;
     @Column(name="CONTENT_DATE")
-    LocalDate contentDate;
-    @Enumerated
+    private LocalDate contentDate;
+    @OneToOne(fetch=FetchType.EAGER,cascade = CascadeType.ALL, mappedBy = "diary")
+    private Location location;
     @Column(name="STATUS")
-    Status status;
+    private int status;
 }

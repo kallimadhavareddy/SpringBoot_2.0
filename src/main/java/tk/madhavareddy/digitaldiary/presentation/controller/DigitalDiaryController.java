@@ -7,7 +7,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import tk.madhavareddy.digitaldiary.persistence.entity.Diary;
+
+import tk.madhavareddy.digitaldiary.presentation.data.Diary;
 import tk.madhavareddy.digitaldiary.process.service.DigitalDiaryService;
 import javax.validation.Valid;
 import java.util.List;

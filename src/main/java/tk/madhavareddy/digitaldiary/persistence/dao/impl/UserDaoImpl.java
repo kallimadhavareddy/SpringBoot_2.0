@@ -2,7 +2,6 @@ package tk.madhavareddy.digitaldiary.persistence.dao.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import tk.madhavareddy.digitaldiary.persistence.dao.Dao;
 
 import tk.madhavareddy.digitaldiary.persistence.dao.UserDao;
 import tk.madhavareddy.digitaldiary.persistence.entity.User;
@@ -31,11 +30,16 @@ public class UserDaoImpl  implements UserDao {
     }
 
     @Override
-    public void delete(long id) {
+    public void deleteById(long id) {
     }
 
     @Override
     public User findByName(String name){
         return userRepository.findByUsername(name);
+    }
+
+    @Override
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 }
