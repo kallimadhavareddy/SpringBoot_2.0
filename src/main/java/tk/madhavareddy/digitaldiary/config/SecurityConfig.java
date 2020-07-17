@@ -39,7 +39,7 @@ import javax.annotation.Resource;
  */
 
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity(debug=true)
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @Slf4j
 @Order(1)
@@ -87,12 +87,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http
+                .csrf().disable()
+                .anonymous().disable()
+                .authorizeRequests()
+                .antMatchers("/api-docs/**").permitAll();
+      //ttp.authorizeRequests().antMatchers("/").permitAll().anyRequest().authenticated();
+}
+    /*@Override
+    protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .anonymous().disable()
                 .authorizeRequests()
                 .antMatchers("/api-docs/**").permitAll();
     }
-
+*/
     @Bean
     public TokenStore tokenStore() {
         return new InMemoryTokenStore();
