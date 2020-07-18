@@ -23,6 +23,7 @@ import javax.persistence.EntityNotFoundException;
 @Service
 @Slf4j
 public class DigitalDiaryServiceImpl implements DigitalDiaryService {
+
 	private final DiaryDao diaryDao;
 	private final DiarySpecification diarySpecification;
     private final ObjectMapperUtils objectMapperUtils;
@@ -33,6 +34,15 @@ public class DigitalDiaryServiceImpl implements DigitalDiaryService {
 		this.diarySpecification = diarySpecification;
         this.objectMapperUtils = objectMapperUtils;
     }
+
+
+	@Override
+	public void getLogger() {
+		log.warn("Warning Log");
+		log.info("info Log");
+		log.debug("debug log");
+		log.error("error log");
+	}
 
 	@Override
 	public Diary createDiary(Diary diary) {

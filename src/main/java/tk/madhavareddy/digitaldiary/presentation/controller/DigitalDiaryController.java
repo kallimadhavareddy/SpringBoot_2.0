@@ -17,16 +17,31 @@ public class DigitalDiaryController {
 
 	private final DigitalDiaryService digitalDiaryService;
 
+	@Autowired
+	public DigitalDiaryController(DigitalDiaryService digitalDiaryService,ObjectMapperUtils objectMapperUtils) {
+		this.digitalDiaryService = digitalDiaryService;
+	}
+
+	@GetMapping("/hello")
+	public String helloEndPoint(){
+		digitalDiaryService.getLogger();
+		return "Hai how are you";
+	}
+
+
+
+
+
+
+
+
+
+
 	@Value("${test.path}")
 	String filePath;
 	@Value("${test.path2}")
 	String filePath2;
 
-
-	@Autowired
-	public DigitalDiaryController(DigitalDiaryService digitalDiaryService,ObjectMapperUtils objectMapperUtils) {
-		this.digitalDiaryService = digitalDiaryService;
-	}
 	@GetMapping("/diaries")
 	public List<Diary> getAllDiaries() {
 		return digitalDiaryService.getAllDiaries();

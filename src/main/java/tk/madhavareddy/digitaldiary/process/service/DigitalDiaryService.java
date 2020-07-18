@@ -12,4 +12,5 @@ public interface DigitalDiaryService {
 	List<Diary> findAllPaginated(Integer currentPage);
 	List<Diary> findAll(String eventContent, Integer currentPage);
 	Diary getDiary(Integer diaryId);
+	void getLogger();
 }
