@@ -22,13 +22,9 @@ public class ObjectMapperUtils {
     public void init(){
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
     }
+
     public <D,T> D map(final T entity, Class<D> outClass){
         return modelMapper.map(entity,outClass);
-    }
-
-    public <S,D> D map(final S source, D destination){
-        modelMapper.map(source, destination);
-        return destination;
     }
     public <D,T> List<D> mapAll(final Collection<T> entityList, Class<D> outClass){
         return entityList.stream().map(entity->map(entity,outClass)).collect(Collectors.toList());

@@ -15,7 +15,6 @@ import tk.madhavareddy.digitaldiary.presentation.exception.NoRecordsFoundExcepti
 import tk.madhavareddy.digitaldiary.process.service.DigitalDiaryService;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
-import javax.websocket.server.PathParam;
 import java.time.LocalDate;
 import java.util.List;
 
